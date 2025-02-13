@@ -1,0 +1,1 @@
+# solucaoTemp_Aplicador
