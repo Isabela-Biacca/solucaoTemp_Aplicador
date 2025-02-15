@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Monitor MAK165</title>
+    <style>
+      .kanban {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+      }
+      .column {
+        background: #f0f0f0;
+        padding: 15px;
+        border-radius: 8px;
+        min-width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="kanban">
+      <div class="column">
+        <h3>🔄 Mover Ordem Manualmente</h3>
+        <input type="text" id="orderInput" placeholder="Número da Ordem" />
+        <button onclick="moveOrder()">Mover</button>
+      </div>
+      <div class="column">
+        <h3>🕒 Waiting</h3>
+        <div id="waiting-orders"></div>
+      </div>
+      <div class="column">
+        <h3>✅ Input</h3>
+        <div id="input-orders"></div>
+      </div>
+    </div>
+    <script>
+      async function loadOrders() {
+        const response = await fetch("/api/orders");
+        const data = await response.json();
+
+        document.getElementById("waiting-orders").innerHTML = data.waiting
+          .map((id) => `<div class="order-card">${id}</div>`)
+          .join("");
+
+        document.getElementById("input-orders").innerHTML = data.input
+          .map((id) => `<div class="order-card">${id}</div>`)
+          .join("");
+      }
+
+      async function moveOrder() {
+        const orderId = document.getElementById("orderInput").value;
+        const response = await fetch(`/move/${orderId}`);
+        alert(await response.text());
+        loadOrders(); // Atualiza a lista após mover
+      }
+
+      setInterval(loadOrders, 5000); // Atualiza a cada 5 segundos
+      loadOrders();
+    </script>
+  </body>
+</html>
