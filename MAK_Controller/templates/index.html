@@ -38,11 +38,25 @@
         const data = await response.json();
 
         document.getElementById("waiting-orders").innerHTML = data.waiting
-          .map((id) => `<div class="order-card">${id}</div>`)
+          .map(order => 
+            `<div class="order-card">
+              <strong>ID:</strong> ${order.id}<br>
+              <strong>Data:</strong> ${order.data}<br>
+              <strong>SKU:</strong> ${order.sku}
+              <hr>
+            </div>`
+          )
           .join("");
-
+    
         document.getElementById("input-orders").innerHTML = data.input
-          .map((id) => `<div class="order-card">${id}</div>`)
+          .map(order => 
+            `<div class="order-card">
+              <strong>ID:</strong> ${order.id}<br>
+              <strong>Data:</strong> ${order.data}<br>
+              <strong>SKU:</strong> ${order.sku}
+              <hr>
+            </div>`
+          )
           .join("");
       }
 

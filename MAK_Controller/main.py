@@ -20,8 +20,23 @@ def index():
 # API para listar ordens
 @app.route('/api/orders')
 def api_orders():
-    waiting_orders = [f.split('_')[1].split('.')[0] for f in os.listdir(FOLDERS["waiting"]) if f.endswith(".xml")]
-    input_orders = [f.split('_')[1].split('.')[0] for f in os.listdir(FOLDERS["input"]) if f.endswith(".xml")]
+    waiting_orders = []
+    input_orders = []
+    
+    for file in Path(FOLDERS["waiting"]).glob("*.xml"):
+        try:
+            order_id, creation_date, sku = get_production_order(file)
+            waiting_orders.append({"id": order_id, "data": creation_date, "sku": sku})
+        except Exception as e:
+            log(f"Erro ao processar {file}: {e}")
+
+    for file in Path(FOLDERS["input"]).glob("*.xml"):
+        try:
+            order_id, creation_date, sku = get_production_order(file)
+            input_orders.append({"id": order_id, "data": creation_date, "sku": sku})
+        except Exception as e:
+            log(f"Erro ao processar {file}: {e}")
+            
     return jsonify({"waiting": waiting_orders, "input": input_orders})
 
 # Rota para movimentação manual (main.py)
@@ -29,15 +44,28 @@ def api_orders():
 def move_order(order_id):
     try:
         # Procura o arquivo em waiting
+        files = []
         for file in Path(FOLDERS["waiting"]).glob("*.xml"):
-            current_id, _ = get_production_order(file)
-            if current_id == order_id:
-                move_to_input(file, overwrite=True)
-                log(f"Ordem {order_id} movida manualmente")
-                return jsonify({"status": "success", "message": f"Ordem {order_id} movida!"})
-        
-        return jsonify({"status": "error", "message": "Ordem não encontrada"}), 404
-        
+            try:
+                current_id, creation_date, sku = get_production_order(file)
+                if current_id == order_id:
+                    files.append((file, creation_date))
+            except Exception as e:
+                log(f"Erro ao processar {file}: {e}")
+
+        # Se houver mais de um arquivo com a mesma ordem de produção, seleciona o com data mais recente
+        if len(files) > 1:
+            latest_file = max(files, key=lambda x: x[1])
+            file_to_move = latest_file[0]
+        elif len(files) == 1:
+            file_to_move = files[0][0]
+        else:
+            return jsonify({"status": "error", "message": "Ordem não encontrada"}), 404
+
+        move_to_input(file_to_move, overwrite=True)
+        log(f"Ordem {order_id} movida manualmente")
+        return jsonify({"status": "success", "message": f"Ordem {order_id} movida!"})
+
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
@@ -62,7 +90,7 @@ class MakHandler(FileSystemEventHandler):
             # Verifica se já existe em input
             existing_files = []
             for existing_file in Path(FOLDERS["input"]).glob("*.xml"):
-                existing_id, existing_date = get_production_order(existing_file)
+                existing_id, existing_date, _ = get_production_order(existing_file)
                 if existing_id == new_order_id:
                     existing_files.append((existing_file, existing_date))
 
