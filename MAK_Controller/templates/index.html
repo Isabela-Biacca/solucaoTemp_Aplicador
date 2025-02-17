@@ -18,7 +18,7 @@
       /* HEADER */
       header {
         text-align: center;
-        background-color: #3a8eeb;
+        background-color: #0051b4;
         color: white;
         padding: 1.5%;
         display: flex;
@@ -84,7 +84,7 @@
 
       .input-section button {
         padding: 10px 20px;
-        background-color: #3a8eeb;
+        background-color: #0051b4;
         border: none;
         border-radius: 4px;
         color: white;
@@ -109,7 +109,7 @@
 
       .status h2 {
         text-align: center;
-        background-color: #3a8eeb;
+        background-color: #0051b4;
         color: white;
         margin-top: 0;
         padding: 10px 0;
@@ -130,7 +130,7 @@
       }
 
       .status th {
-        background-color: #3a8eeb;
+        background-color: #0051b4;
         color: white;
       }
     </style>
@@ -162,6 +162,15 @@
       </header>
       <br /><br />
 
+      <div class="input-section">
+        <label for="codigo">Insira o código da ordem de produção</label>
+        <br /><br />
+        <input type="text" id="orderInput" placeholder="Número da Ordem" />
+        <button onclick="moveOrder()">Enviar</button>
+      </div>
+
+      <br>
+
       <div class="status-box">
         <div class="status">
           <h2>BW</h2>
@@ -180,14 +189,6 @@
 
         <div class="status">
           <h2>PC</h2>
-
-          <div class="input-section">
-            <label for="codigo">Insira o código da ordem de produção</label>
-            <br /><br />
-            <input type="text" id="orderInput" placeholder="Número da Ordem" />
-            <button onclick="moveOrder()">Enviar</button>
-          </div>
-
           <table>
             <thead>
               <tr>
