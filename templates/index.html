@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solução Temporária Aplicador LPN</title>
+
+    <script>
+      function redirecionar() {
+        window.location.href = "./log.html"; // Substitua pela URL desejada
+      }
+    </script>
+
+    <style>
+      /* CORPO */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f8;
+        margin: 0;
+        padding: 10px;
+        height: max-content;
+      }
+
+      /* HEADER */
+      header {
+        text-align: center;
+        background-color: #3a8eeb;
+        color: white;
+        padding: 1.5%;
+        display: flex;
+        flex-wrap: wrap; /* Allow items to wrap onto a new line if needed */
+        justify-content: space-between; /* Space out items evenly */
+        align-items: center; /* Align items vertically centered */
+      }
+
+      header img {
+        max-width: 100%; /* Make the logo responsive */
+        height: auto; /* Maintain the aspect ratio */
+      }
+
+      header h1 {
+        margin: 0;
+        padding: 15px; /* Reduced padding for smaller screens */
+        font-size: 2em; /* Responsive font size */
+        color: #000000;
+      }
+
+      header button {
+        padding: 10px;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 10px 0;
+        max-width: 100%; /* Limite de largura */
+        box-sizing: border-box; /* Inclui padding e bordas na largura total */
+        overflow: hidden; /* Oculta o excesso de texto */
+        text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
+        white-space: nowrap; /* Evita quebras de linha */
+      }
+
+      @media (max-width: 600px) {
+        header {
+          flex-direction: column; /* Stack items vertically */
+          align-items: center; /* Center items */
+        }
+
+        header h1 {
+          font-size: 1.2em; /* Decrease font size */
+        }
+
+        header button {
+          width: 100%; /* Make the button full width on smaller screens */
+        }
+      }
+
+      /* INPUT */
+      .input-section {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .input-section input {
+        padding: 10px;
+        width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .input-section button {
+        padding: 10px 20px;
+        background-color: #3a8eeb;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      /* BOX KANBAN */
+      .status-box {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+      .status {
+        width: 30%;
+        background-color: #f7f9fc;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+      }
+
+      .status h2 {
+        text-align: center;
+        background-color: #3a8eeb;
+        color: white;
+        margin-top: 0;
+        padding: 10px 0;
+        border-radius: 4px;
+      }
+
+      .status table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      .status th,
+      .status td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+
+      .status th {
+        background-color: #3a8eeb;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img
+          src="../static/logo.png"
+          alt="Infra ID Logo"
+          class="logo"
+          width="150"
+          height="90"
+        />
+        <h1>SOLUÇÃO TEMPORÁRIA APLICADOR LPN</h1>
+
+        <button
+          style="
+            color: white;
+            background-color: black;
+            padding: 10px;
+            width: 5vw;
+            height: 6vh;
+          "
+          onclick="redirecionar()"
+        >
+          LOG
+        </button>
+      </header>
+      <br /><br />
+
+
+      <div class="status-box">
+        <div class="status">
+          <h2>BW</h2>
+
+          <div class="input-section">
+            <label for="codigo">Insira o código da ordem de produção</label>
+            <br /><br />
+            <input type="text" id="codigo" name="codigo" />
+            <button>Enviar</button>
+          </div>
+
+          <table>
+            <tr>
+              <th>Linha</th>
+              <th>Ordem em Produção</th>
+            </tr>
+            <tr>
+              <td>S01</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>S03</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>S05</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>S08</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>S10</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>S11</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>S12</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>S14</td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+
+
+
+
+
+        <div class="status">
+          <h2>PC</h2>
+
+          <div class="input-section">
+            <label for="codigo">Insira o código da ordem de produção</label>
+            <br /><br />
+            <input type="text" id="codigo" name="codigo" />
+            <button>Enviar</button>
+          </div>
+
+          <table>
+            <tr>
+              <th>Linha</th>
+              <th>Ordem em Produção</th>
+            </tr>
+            <tr>
+              <td>D11</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>D12</td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+
+
+
+
+
+
+
+
+
+        <div class="status">
+          <h2>HC</h2>
+
+          <div class="input-section">
+            <label for="codigo">Insira o código da ordem de produção</label>
+            <br /><br />
+            <input type="text" id="codigo" name="codigo" />
+            <button>Enviar</button>
+          </div>
+
+          <table>
+            <tr>
+              <th>Linha</th>
+              <th>Ordem em Produção</th>
+            </tr>
+            <tr>
+              <td>A01</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>A02</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>A03</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>A04</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>A06</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>A07</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>A08</td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
