@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Solução Temporária Aplicador LPN</title>
 
-    <script>
-      function redirecionar() {
-        window.location.href = "./log.html"; // Substitua pela URL desejada
-      }
-    </script>
-
     <style>
       /* CORPO */
       body {
@@ -168,61 +162,21 @@
       </header>
       <br /><br />
 
-
       <div class="status-box">
         <div class="status">
           <h2>BW</h2>
 
-          <div class="input-section">
-            <label for="codigo">Insira o código da ordem de produção</label>
-            <br /><br />
-            <input type="text" id="codigo" name="codigo" />
-            <button>Enviar</button>
-          </div>
-
           <table>
-            <tr>
-              <th>Linha</th>
-              <th>Ordem em Produção</th>
-            </tr>
-            <tr>
-              <td>S01</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>S03</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>S05</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>S08</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>S10</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>S11</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>S12</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>S14</td>
-              <td></td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Linha</th>
+                <th>Ordem em Produção</th>
+                <th>SKU</th>
+              </tr>
+            </thead>
+            <tbody id="bw-table"></tbody>
           </table>
         </div>
-
-
-
-
 
         <div class="status">
           <h2>PC</h2>
@@ -230,72 +184,132 @@
           <div class="input-section">
             <label for="codigo">Insira o código da ordem de produção</label>
             <br /><br />
-            <input type="text" id="codigo" name="codigo" />
-            <button>Enviar</button>
+            <input type="text" id="orderInput" placeholder="Número da Ordem" />
+            <button onclick="moveOrder()">Enviar</button>
           </div>
 
           <table>
-            <tr>
-              <th>Linha</th>
-              <th>Ordem em Produção</th>
-            </tr>
-            <tr>
-              <td>D11</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>D12</td>
-              <td></td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Linha</th>
+                <th>Ordem em Produção</th>
+                <th>SKU</th>
+              </tr>
+            </thead>
+            <tbody id="pc-table"></tbody>
           </table>
         </div>
 
         <div class="status">
           <h2>HC</h2>
 
-          <div class="input-section">
-            <label for="codigo">Insira o código da ordem de produção</label>
-            <br /><br />
-            <input type="text" id="codigo" name="codigo" />
-            <button>Enviar</button>
-          </div>
-
           <table>
-            <tr>
-              <th>Linha</th>
-              <th>Ordem em Produção</th>
-            </tr>
-            <tr>
-              <td>A01</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>A02</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>A03</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>A04</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>A06</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>A07</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>A08</td>
-              <td></td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Linha</th>
+                <th>Ordem em Produção</th>
+                <th>SKU</th>
+              </tr>
+            </thead>
+            <tbody id="hc-table"></tbody>
           </table>
         </div>
       </div>
     </div>
+
+    <script>
+      function redirecionar() {
+        window.location.href = "./log.html"; // Substitua pela URL desejada
+      }
+
+      async function loadOrders() {
+        const response = await fetch("/api/orders");
+        const data = await response.json();
+
+        bw = []
+        pc = []
+        hc = []
+
+        data.input.forEach(order => {
+          if (order.linha.startsWith("S")) {
+            bw.push(order)
+          } else if (order.linha.startsWith("D")) {
+            pc.push(order)
+          } else if (order.linha.startsWith("A")) {
+            hc.push(order)
+          }
+        })
+
+        document.getElementById("bw-table").innerHTML = bw.length > 0 ? bw
+          .map((order) => {
+            // Verifica se a linha começa com "S"
+            if (order.linha.startsWith("S")) {
+              return `
+                <tr>
+                  <td>${order.linha}</td>
+                  <td>${order.op}</td>
+                  <td>${order.sku}</td>
+                </tr>
+              `;
+            }
+          })
+          .join("")
+        : `
+          <tr>
+            <td colspan="3">Nenhuma Ordem em produção no momento</td>
+          </tr>
+        `
+
+        document.getElementById("pc-table").innerHTML = pc.length > 0 ? pc
+          .map((order) => {
+            // Verifica se a linha começa com "D"
+            if (order.linha.startsWith("D")) {
+              return `
+                <tr>
+                  <td>${order.linha}</td>
+                  <td>${order.op}</td>
+                  <td>${order.sku}</td>
+                </tr>
+              `;
+            }
+          })
+          .join("")
+        : `
+          <tr>
+            <td colspan="3">Nenhuma Ordem em produção no momento</td>
+          </tr>
+        `
+
+        document.getElementById("hc-table").innerHTML = hc.length > 0 ? hc
+          .map((order) => {
+            // Verifica se a linha começa com "A
+            if (order.linha.startsWith("A")) {
+              return `
+                <tr>
+                  <td>${order.linha}</td>
+                  <td>${order.op}</td>
+                  <td>${order.sku}</td>
+                </tr>
+              `;
+            }
+          })
+          .join("")
+        : `
+          <tr>
+            <td colspan="3">Nenhuma Ordem em produção no momento</td>
+          </tr>
+        `
+      }
+
+      async function moveOrder() {
+        const orderId = document.getElementById("orderInput").value;
+        const response = await fetch(`/move/${orderId}`);
+        alert(await response.text());
+        loadOrders(); // Atualiza a lista após mover
+      }
+
+      setInterval(loadOrders, 5000); // Atualiza a cada 5 segundos
+      loadOrders();
+    </script>
   </body>
 </html>

@@ -25,15 +25,15 @@ def api_orders():
     
     for file in Path(FOLDERS["waiting"]).glob("*.xml"):
         try:
-            order_id, creation_date, sku = get_production_order(file)
-            waiting_orders.append({"id": order_id, "data": creation_date, "sku": sku})
+            op, creation_date, sku, linha = get_production_order(file)
+            waiting_orders.append({"op": op, "data": creation_date, "sku": sku, "linha": linha})
         except Exception as e:
             log(f"Erro ao processar {file}: {e}")
 
     for file in Path(FOLDERS["input"]).glob("*.xml"):
         try:
-            order_id, creation_date, sku = get_production_order(file)
-            input_orders.append({"id": order_id, "data": creation_date, "sku": sku})
+            op, creation_date, sku, linha = get_production_order(file)
+            input_orders.append({"op": op, "data": creation_date, "sku": sku, "linha": linha})
         except Exception as e:
             log(f"Erro ao processar {file}: {e}")
             
@@ -47,7 +47,7 @@ def move_order(order_id):
         files = []
         for file in Path(FOLDERS["waiting"]).glob("*.xml"):
             try:
-                current_id, creation_date, sku = get_production_order(file)
+                current_id, creation_date, sku, linha = get_production_order(file)
                 if current_id == order_id:
                     files.append((file, creation_date))
             except Exception as e:
@@ -121,4 +121,4 @@ if __name__ == '__main__':
     observer.schedule(MakHandler(),  path=str(FOLDERS["waiting"]), recursive=False)
     observer.start()
     
-    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
+    app.run(host='localhost', port=5000, debug=True, threaded=True)
