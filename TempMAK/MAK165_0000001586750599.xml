@@ -1,0 +1,449 @@
+<SyncMAK165 xmlns="http://tempuri.org/">
+  <request xmlns:ns0="http://www.wbf.org/xml/B2MML-V0401" releaseID="">
+    <ns0:ApplicationArea>
+      <ns0:Sender>
+        <ns0:ReferenceID>0000001586750599</ns0:ReferenceID>
+      </ns0:Sender>
+      <ns0:CreationDateTime>2025-02-11T12:00:15</ns0:CreationDateTime>
+    </ns0:ApplicationArea>
+    <ns0:DataArea>
+      <ns0:Sync>
+        <ns0:ActionCriteria>
+          <ns0:ActionExpression actionCode="ADD"></ns0:ActionExpression>
+        </ns0:ActionCriteria>
+      </ns0:Sync>
+      <ns0:ProductionSchedule>
+        <ns0:ID>9411330</ns0:ID>
+        <ns0:Location>
+          <ns0:EquipmentID>3166</ns0:EquipmentID>
+          <ns0:EquipmentElementLevel>Site</ns0:EquipmentElementLevel>
+        </ns0:Location>
+        <ns0:PublishedDate>2025-02-11</ns0:PublishedDate>
+        <ns0:StartTime>07:10:32</ns0:StartTime>
+        <ns0:ProductionRequest>
+          <ns0:ID>0001</ns0:ID>
+          <ns0:ProductProductionRuleID>648002861_ALT1</ns0:ProductProductionRuleID>
+          <ns0:StartTime>2025-02-11T07:10:32</ns0:StartTime>
+          <ns0:EndTime>2025-02-11T07:10:32</ns0:EndTime>
+          <ns0:SegmentRequirement>
+            <ns0:ID>0001</ns0:ID>
+            <ns0:ProductionParameter>
+              <ns0:Parameter>
+                <ns0:ID></ns0:ID>
+                <ns0:Value>
+                  <ns0:ValueString format="yyyy-MM-dd" name="Basic_Finish_Date">2025-02-11</ns0:ValueString>
+                  <ns0:DataType></ns0:DataType>
+                  <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                </ns0:Value>
+              </ns0:Parameter>
+            </ns0:ProductionParameter>
+            <ns0:PersonnelRequirement>
+              <ns0:PersonnelClassID>001</ns0:PersonnelClassID>
+              <ns0:PersonID>Z01</ns0:PersonID>
+            </ns0:PersonnelRequirement>
+            <ns0:EquipmentRequirement>
+              <ns0:EquipmentClassID>Z101</ns0:EquipmentClassID>
+              <ns0:Quantity>
+                <ns0:QuantityString></ns0:QuantityString>
+                <ns0:DataType>Float</ns0:DataType>
+                <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+              </ns0:Quantity>
+            </ns0:EquipmentRequirement>
+            <ns0:MaterialRequirement>
+              <ns0:MaterialDefinitionID schemeVersionID="0001">64800286</ns0:MaterialDefinitionID>
+              <ns0:Description>SEDA CO LUMINOSO UV 12X300ML</ns0:Description>
+              <ns0:Location>
+                <ns0:EquipmentID>261</ns0:EquipmentID>
+                <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                <ns0:Location>PT00</ns0:Location>
+              </ns0:Location>
+              <ns0:MaterialUse>Produced</ns0:MaterialUse>
+              <ns0:Quantity>
+                <ns0:QuantityString name="Total_Order_Quantity_Header">5669.000</ns0:QuantityString>
+                <ns0:DataType>Decimal</ns0:DataType>
+                <ns0:UnitOfMeasure>CS</ns0:UnitOfMeasure>
+              </ns0:Quantity>
+              <ns0:Quantity>
+                <ns0:QuantityString name="Qualifier_Pallet_Quantity">210</ns0:QuantityString>
+                <ns0:DataType></ns0:DataType>
+                <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+              </ns0:Quantity>
+              <ns0:Quantity>
+                <ns0:QuantityString name="Qualifier_Boxes_Per_Layer">000000</ns0:QuantityString>
+                <ns0:DataType></ns0:DataType>
+                <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+              </ns0:Quantity>
+              <ns0:Quantity>
+                <ns0:QuantityString name="Layers_Per_Pallet">000000</ns0:QuantityString>
+                <ns0:DataType></ns0:DataType>
+                <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+              </ns0:Quantity>
+              <ns0:Quantity>
+                <ns0:QuantityString name="Base_Quantity">1000.000</ns0:QuantityString>
+                <ns0:DataType>Decimal</ns0:DataType>
+                <ns0:UnitOfMeasure>CS</ns0:UnitOfMeasure>
+              </ns0:Quantity>
+              <ns0:MaterialRequirementProperty>
+                <ns0:ID>FERT</ns0:ID>
+                <ns0:Value>
+                  <ns0:ValueString name="Trading_EAN">27891150099832</ns0:ValueString>
+                  <ns0:DataType></ns0:DataType>
+                  <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                </ns0:Value>
+                <ns0:Value>
+                  <ns0:ValueString name="Total_Shelf_Life">1095</ns0:ValueString>
+                  <ns0:DataType></ns0:DataType>
+                  <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                </ns0:Value>
+                <ns0:Value>
+                  <ns0:ValueString name="Indicator_Shelf_Life_Expiry"></ns0:ValueString>
+                  <ns0:DataType></ns0:DataType>
+                  <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                </ns0:Value>
+                <ns0:Value>
+                  <ns0:ValueString name="Rounding_Rule_for_SLED"></ns0:ValueString>
+                  <ns0:DataType></ns0:DataType>
+                  <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                </ns0:Value>
+              </ns0:MaterialRequirementProperty>
+            </ns0:MaterialRequirement>
+            <ns0:MaterialRequirement>
+              <ns0:MaterialDefinitionID schemeVersionID="0001">64800286</ns0:MaterialDefinitionID>
+              <ns0:Location>
+                <ns0:EquipmentID></ns0:EquipmentID>
+                <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                <ns0:Location>PT00</ns0:Location>
+              </ns0:Location>
+              <ns0:MaterialUse>Prod_Line_Item</ns0:MaterialUse>
+              <ns0:Quantity>
+                <ns0:QuantityString name="Order_Item_Quantity">5669.000</ns0:QuantityString>
+                <ns0:DataType></ns0:DataType>
+                <ns0:UnitOfMeasure>CS</ns0:UnitOfMeasure>
+              </ns0:Quantity>
+              <ns0:Quantity>
+                <ns0:QuantityString name="Quantity_Goods_Received">1470.000</ns0:QuantityString>
+                <ns0:DataType></ns0:DataType>
+                <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+              </ns0:Quantity>
+              <ns0:Quantity>
+                <ns0:QuantityString name="Rounding_Value">11336.000</ns0:QuantityString>
+                <ns0:DataType></ns0:DataType>
+                <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+              </ns0:Quantity>
+            </ns0:MaterialRequirement>
+            <ns0:MaterialProducedRequirement>
+              <ns0:Quantity>
+                <ns0:QuantityString>1000.000</ns0:QuantityString>
+                <ns0:DataType></ns0:DataType>
+                <ns0:UnitOfMeasure>CS</ns0:UnitOfMeasure>
+              </ns0:Quantity>
+            </ns0:MaterialProducedRequirement>
+            <ns0:SegmentRequirement>
+              <ns0:ID>00000002</ns0:ID>
+              <ns0:SegmentRequirement>
+                <ns0:ID>0110</ns0:ID>
+                <ns0:Description>SEDA CO LUMINOSO UV 12X300ML</ns0:Description>
+                <ns0:Location>
+                  <ns0:EquipmentID>ZS01</ns0:EquipmentID>
+                  <ns0:EquipmentElementLevel>WorkCenter</ns0:EquipmentElementLevel>
+                </ns0:Location>
+                <ns0:ProductionParameter>
+                  <ns0:Parameter>
+                    <ns0:ID>Operation_Quantity</ns0:ID>
+                    <ns0:Value>
+                      <ns0:ValueString>5669.000</ns0:ValueString>
+                      <ns0:DataType></ns0:DataType>
+                      <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                    </ns0:Value>
+                  </ns0:Parameter>
+                </ns0:ProductionParameter>
+                <ns0:ProductionParameter>
+                  <ns0:Parameter>
+                    <ns0:ID>Earliest_Scheduled_Start</ns0:ID>
+                    <ns0:Value>
+                      <ns0:ValueString>20250211T071032</ns0:ValueString>
+                      <ns0:DataType></ns0:DataType>
+                      <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                    </ns0:Value>
+                  </ns0:Parameter>
+                </ns0:ProductionParameter>
+                <ns0:ProductionParameter>
+                  <ns0:Parameter>
+                    <ns0:ID>Earliest_Scheduled_Finish</ns0:ID>
+                    <ns0:Value>
+                      <ns0:ValueString>20250211T071032</ns0:ValueString>
+                      <ns0:DataType></ns0:DataType>
+                      <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                    </ns0:Value>
+                  </ns0:Parameter>
+                </ns0:ProductionParameter>
+                <ns0:EquipmentRequirement>
+                  <ns0:EquipmentID>10002462</ns0:EquipmentID>
+                </ns0:EquipmentRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>25967</ns0:MaterialDefinitionID>
+                  <ns0:Description>COLA HM NATIONAL INST LOK 4342930</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>11.905</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>KG</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.00</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>216731</ns0:MaterialDefinitionID>
+                  <ns0:Description>FLM STRECH 500MMX20MIC</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>9.808</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>KG</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.00</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>64788543</ns0:MaterialDefinitionID>
+                  <ns0:Description>BOT SSK CO PINK 300 340ML SASSY</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>68369.000</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>EA</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.50</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>64788548</ns0:MaterialDefinitionID>
+                  <ns0:Description>CAP SSK SH/CO PINK LARGE SASSY</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>68369.000</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>EA</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.50</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>64789349</ns0:MaterialDefinitionID>
+                  <ns0:Description>FOP SSK CO GLICOLICO 300ML SASSY BR</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>68369.000</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>EA</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.50</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>64789360</ns0:MaterialDefinitionID>
+                  <ns0:Description>BOP SSK CO GLICOLICO 300ML SASSY BR</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>68369.000</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>EA</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.50</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>64800271</ns0:MaterialDefinitionID>
+                  <ns0:Description>CU SEDA CO LUMINOSO UV 300ML SSBR</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>68028.000</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>EA</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.00</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>64806465</ns0:MaterialDefinitionID>
+                  <ns0:Description>CUC CD SEDA/SEDAL LUMINOUS UV LATAM</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>20000.232</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>KG</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.00</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>67529839</ns0:MaterialDefinitionID>
+                  <ns0:Description>TINTA BASE OLEO VEGETAL 1000ML</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>18.141</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>ML</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.00</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>68619279</ns0:MaterialDefinitionID>
+                  <ns0:Description>CASE SEDA CO GEN 12X325ML JUNT 12X300ML</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>5698.000</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>EA</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.50</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID>100000031873</ns0:MaterialDefinitionID>
+                  <ns0:Description>PALLET CHEP BR</ns0:Description>
+                  <ns0:Location>
+                    <ns0:EquipmentID></ns0:EquipmentID>
+                    <ns0:EquipmentElementLevel></ns0:EquipmentElementLevel>
+                  </ns0:Location>
+                  <ns0:MaterialUse>Consumed</ns0:MaterialUse>
+                  <ns0:Quantity>
+                    <ns0:QuantityString>27.000</ns0:QuantityString>
+                    <ns0:DataType>Decimal</ns0:DataType>
+                    <ns0:UnitOfMeasure>EA</ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                  <ns0:Quantity>
+                    <ns0:QuantityString name="Scrap_Percent">0.00</ns0:QuantityString>
+                    <ns0:DataType></ns0:DataType>
+                    <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                  </ns0:Quantity>
+                </ns0:MaterialRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID schemeID="L" schemeName="Bill_of_Materials">00901127</ns0:MaterialDefinitionID>
+                  <ns0:MaterialRequirementProperty></ns0:MaterialRequirementProperty>
+                </ns0:MaterialRequirement>
+              </ns0:SegmentRequirement>
+              <ns0:SegmentRequirement>
+                <ns0:ID>0200</ns0:ID>
+                <ns0:Description>SEDA CO LUMINOSO UV 12X300ML</ns0:Description>
+                <ns0:Location>
+                  <ns0:EquipmentID>S01</ns0:EquipmentID>
+                  <ns0:EquipmentElementLevel>WorkCenter</ns0:EquipmentElementLevel>
+                </ns0:Location>
+                <ns0:ProductionParameter>
+                  <ns0:Parameter>
+                    <ns0:ID>Operation_Quantity</ns0:ID>
+                    <ns0:Value>
+                      <ns0:ValueString>5669.000</ns0:ValueString>
+                      <ns0:DataType></ns0:DataType>
+                      <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                    </ns0:Value>
+                  </ns0:Parameter>
+                </ns0:ProductionParameter>
+                <ns0:ProductionParameter>
+                  <ns0:Parameter>
+                    <ns0:ID>Earliest_Scheduled_Start</ns0:ID>
+                    <ns0:Value>
+                      <ns0:ValueString>20250211T071032</ns0:ValueString>
+                      <ns0:DataType></ns0:DataType>
+                      <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                    </ns0:Value>
+                  </ns0:Parameter>
+                </ns0:ProductionParameter>
+                <ns0:ProductionParameter>
+                  <ns0:Parameter>
+                    <ns0:ID>Earliest_Scheduled_Finish</ns0:ID>
+                    <ns0:Value>
+                      <ns0:ValueString>20250211T134714</ns0:ValueString>
+                      <ns0:DataType></ns0:DataType>
+                      <ns0:UnitOfMeasure></ns0:UnitOfMeasure>
+                    </ns0:Value>
+                  </ns0:Parameter>
+                </ns0:ProductionParameter>
+                <ns0:EquipmentRequirement>
+                  <ns0:EquipmentID>10002487</ns0:EquipmentID>
+                </ns0:EquipmentRequirement>
+                <ns0:MaterialRequirement>
+                  <ns0:MaterialDefinitionID schemeID="L" schemeName="Bill_of_Materials">00901127</ns0:MaterialDefinitionID>
+                  <ns0:MaterialRequirementProperty></ns0:MaterialRequirementProperty>
+                </ns0:MaterialRequirement>
+              </ns0:SegmentRequirement>
+            </ns0:SegmentRequirement>
+          </ns0:SegmentRequirement>
+          <ns0:RequestState>Released</ns0:RequestState>
+        </ns0:ProductionRequest>
+      </ns0:ProductionSchedule>
+    </ns0:DataArea>
+  </request>
+</SyncMAK165>
