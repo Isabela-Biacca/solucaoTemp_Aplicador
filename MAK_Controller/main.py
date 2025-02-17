@@ -1,14 +1,16 @@
 from modules.logger import log
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from modules.xml_processor import get_production_order
 from modules.file_manager import move_to_input
 from config import FOLDERS
+from datetime import datetime
+from pathlib import Path
 import threading
 import os
 import msvcrt
-from pathlib import Path  # Importe Path aqui também
+import time
 
 app = Flask(__name__)
 
@@ -69,56 +71,95 @@ def move_order(order_id):
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+@app.route('/logs')
+def logs():
+    return render_template('log.html')
+
+@app.route('/get_log')
+def get_log():
+    date = request.args.get('date', datetime.now().strftime("%Y-%m-%d"))
+    try:
+        year, month, day = date.split('-')
+        log_path = os.path.join('logs', year, month, f"{date}.log")
+        
+        with open(log_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+        
+        return jsonify({"content": content})
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 404
+
 # Monitor de Arquivos
 class MakHandler(FileSystemEventHandler):
     def on_created(self, event):
         if not event.is_directory and event.src_path.endswith(".xml"):
+            threading.Thread(target=self.handle_file, args=(event.src_path,)).start()
+
+    def handle_file(self, file_path):
+        max_retries = 5
+        retry_delay = 1  # segundos
+
+        for attempt in range(max_retries):
             try:
-                with open(event.src_path, "r+") as f:
-                    # Bloqueia o arquivo para evitar race conditions
-                    msvcrt.locking(f.fileno(), msvcrt.LK_NBLCK, 1)
-                    
-                    threading.Thread(target=self.process_file, args=(event.src_path,)).start()
-            except (BlockingIOError, PermissionError):  # Captura erro de arquivo travado
-                print(f"Arquivo {event.src_path} já está em processamento. Ignorando...")
-    
-    def process_file(self, file_path):
+                with open(file_path, "r") as file:
+                    try:
+                        # Tentar bloquear o arquivo não bloqueante
+                        msvcrt.locking(file.fileno(), msvcrt.LK_NBLCK, 1)
+                    except (BlockingIOError, PermissionError):
+                        if attempt == max_retries - 1:
+                            log(f"Arquivo {file_path} travado após {max_retries} tentativas. Ignorando.")
+                            return
+                        time.sleep(retry_delay)
+                        continue
+
+                    # Ler os dados do arquivo
+                    try:
+                        new_order_id, new_creation_date, _, _ = get_production_order(file)
+                    except Exception as e:
+                        log(f"Erro ao processar {file_path}: {e}")
+                        return
+                    break  # Sai do loop se bem-sucedido
+            except IOError as e:
+                if attempt == max_retries - 1:
+                    log(f"Falha ao abrir {file_path} após {max_retries} tentativas: {e}")
+                    return
+                time.sleep(retry_delay)
+        else:
+            log(f"Não foi possível abrir {file_path} após {max_retries} tentativas.")
+            return
+
+        # Processar após fechar o arquivo
         try:
-            new_order_id, new_creation_date = get_production_order(file_path)
-            log(f"Ordem detectada: {new_order_id}")
-
-            # Verifica se já existe em input
             existing_files = []
-            for existing_file in Path(FOLDERS["input"]).glob("*.xml"):
-                existing_id, existing_date, _ = get_production_order(existing_file)
-                if existing_id == new_order_id:
-                    existing_files.append((existing_file, existing_date))
+            input_folder = Path(FOLDERS["input"])
+            for existing_file in input_folder.glob("*.xml"):
+                try:
+                    existing_id, existing_date, _, _ = get_production_order(existing_file)
+                    if existing_id == new_order_id:
+                        existing_files.append((existing_file, existing_date))
+                except Exception as e:
+                    log(f"Erro ao processar {existing_file}: {e}")
 
-            if existing_files:  # Só substitui se já existir na input
-                # Encontra o arquivo mais recente
+            if existing_files:
                 latest_file = max(existing_files, key=lambda x: x[1])
-                
                 if new_creation_date > latest_file[1]:
-                    # Substitui todos os arquivos antigos
-                    for file, _ in existing_files:
-                        os.remove(file)
-                        log(f"Arquivo antigo removido: {file.name}")
-                    
+                    for f in [file for file, _ in existing_files]:
+                        os.remove(f)
+                        log(f"Arquivo antigo removido: {f.name}")
                     move_to_input(Path(file_path))
                     log(f"Ordem {new_order_id} atualizada automaticamente")
                 else:
-                    os.remove(file_path)  # Descarta o novo arquivo
+                    os.remove(file_path)
                     log(f"Ordem {new_order_id} ignorada (versão antiga)")
-                    
-            else:  # Mantém em waiting para ação manual
+            else:
                 log(f"Ordem {new_order_id} aguardando ação manual")
-
         except Exception as e:
-            log(f"Erro crítico: {str(e)}")
+            log(f"Erro ao processar {file_path}: {e}")
 
 if __name__ == '__main__':
     observer = Observer()
-    observer.schedule(MakHandler(),  path=str(FOLDERS["waiting"]), recursive=False)
+    observer.schedule(MakHandler(), path=str(FOLDERS["waiting"]), recursive=False)
     observer.start()
     
     app.run(host='localhost', port=5000, debug=True, threaded=True)

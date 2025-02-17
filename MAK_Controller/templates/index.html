@@ -6,12 +6,16 @@
     <title>Solução Temporária Aplicador LPN</title>
 
     <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
       /* CORPO */
       body {
         font-family: Arial, sans-serif;
         background-color: #f0f4f8;
         margin: 0;
-        padding: 10px;
         height: max-content;
       }
 
@@ -169,7 +173,7 @@
         <button onclick="moveOrder()">Enviar</button>
       </div>
 
-      <br>
+      <br />
 
       <div class="status-box">
         <div class="status">
@@ -220,86 +224,92 @@
 
     <script>
       function redirecionar() {
-        window.location.href = "./log.html"; // Substitua pela URL desejada
+        window.location.href = "/logs"; // Substitua pela URL desejada
       }
 
       async function loadOrders() {
         const response = await fetch("/api/orders");
         const data = await response.json();
 
-        bw = []
-        pc = []
-        hc = []
+        bw = [];
+        pc = [];
+        hc = [];
 
-        data.input.forEach(order => {
+        data.input.forEach((order) => {
           if (order.linha.startsWith("S")) {
-            bw.push(order)
+            bw.push(order);
           } else if (order.linha.startsWith("D")) {
-            pc.push(order)
+            pc.push(order);
           } else if (order.linha.startsWith("A")) {
-            hc.push(order)
+            hc.push(order);
           }
-        })
+        });
 
-        document.getElementById("bw-table").innerHTML = bw.length > 0 ? bw
-          .map((order) => {
-            // Verifica se a linha começa com "S"
-            if (order.linha.startsWith("S")) {
-              return `
+        document.getElementById("bw-table").innerHTML =
+          bw.length > 0
+            ? bw
+                .map((order) => {
+                  // Verifica se a linha começa com "S"
+                  if (order.linha.startsWith("S")) {
+                    return `
                 <tr>
                   <td>${order.linha}</td>
                   <td>${order.op}</td>
                   <td>${order.sku}</td>
                 </tr>
               `;
-            }
-          })
-          .join("")
-        : `
+                  }
+                })
+                .join("")
+            : `
           <tr>
             <td colspan="3">Nenhuma Ordem em produção no momento</td>
           </tr>
-        `
+        `;
 
-        document.getElementById("pc-table").innerHTML = pc.length > 0 ? pc
-          .map((order) => {
-            // Verifica se a linha começa com "D"
-            if (order.linha.startsWith("D")) {
-              return `
+        document.getElementById("pc-table").innerHTML =
+          pc.length > 0
+            ? pc
+                .map((order) => {
+                  // Verifica se a linha começa com "D"
+                  if (order.linha.startsWith("D")) {
+                    return `
                 <tr>
                   <td>${order.linha}</td>
                   <td>${order.op}</td>
                   <td>${order.sku}</td>
                 </tr>
               `;
-            }
-          })
-          .join("")
-        : `
+                  }
+                })
+                .join("")
+            : `
           <tr>
             <td colspan="3">Nenhuma Ordem em produção no momento</td>
           </tr>
-        `
+        `;
 
-        document.getElementById("hc-table").innerHTML = hc.length > 0 ? hc
-          .map((order) => {
-            // Verifica se a linha começa com "A
-            if (order.linha.startsWith("A")) {
-              return `
+        document.getElementById("hc-table").innerHTML =
+          hc.length > 0
+            ? hc
+                .map((order) => {
+                  // Verifica se a linha começa com "A
+                  if (order.linha.startsWith("A")) {
+                    return `
                 <tr>
                   <td>${order.linha}</td>
                   <td>${order.op}</td>
                   <td>${order.sku}</td>
                 </tr>
               `;
-            }
-          })
-          .join("")
-        : `
+                  }
+                })
+                .join("")
+            : `
           <tr>
             <td colspan="3">Nenhuma Ordem em produção no momento</td>
           </tr>
-        `
+        `;
       }
 
       async function moveOrder() {

@@ -1,50 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-    <script>
-        function redirecionar() {
-            window.location.href = './index.html'; // Substitua pela URL desejada
-        }
-    </script>
-
-
-
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitor de Logs</title>
+    <!-- DataTables CSS -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"
+    />
     <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
       /* CORPO */
       body {
         font-family: Arial, sans-serif;
         background-color: #f0f4f8;
         margin: 0;
-        padding: 10px;
         height: max-content;
+        padding: 10px;
       }
 
       /* HEADER */
       header {
         text-align: center;
-        background-color: #3a8eeb;
+        background-color: #0051b4;
         color: white;
         padding: 1.5%;
         display: flex;
-        flex-wrap: wrap; /* Allow items to wrap onto a new line if needed */
-        justify-content: space-between; /* Space out items evenly */
-        align-items: center; /* Align items vertically centered */
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
       }
 
       header img {
-        max-width: 100%; /* Make the logo responsive */
-        height: auto; /* Maintain the aspect ratio */
+        max-width: 100%;
+        height: auto;
       }
 
       header h1 {
         margin: 0;
-        padding: 15px; /* Reduced padding for smaller screens */
-        font-size: 2em; /* Responsive font size */
-        color: #000000;
+        padding: 15px;
+        font-size: 2em;
+        color: white;
       }
 
       header button {
@@ -54,111 +56,242 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        margin: 10px 0; /* Add margin for spacing */
+        margin: 10px 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       @media (max-width: 600px) {
-        /* Media query for smaller screens */
         header {
-          flex-direction: column; /* Stack items vertically */
-          align-items: center; /* Center items */
+          flex-direction: column;
+          align-items: center;
         }
 
         header h1 {
-          font-size: 1.2em; /* Decrease font size */
-          
+          font-size: 1.2em;
         }
 
         header button {
-          width: 100%; /* Make the button full width on smaller screens */
+          width: 100%;
         }
       }
 
-      /* INPUT */
-      .input-section {
-        text-align: center;
+      /* FILTROS */
+      .filters {
+        display: flex;
+        gap: 10px;
         margin: 20px 0;
+        flex-wrap: wrap;
       }
 
-      .input-section input {
+      .filters input,
+      .filters select {
         padding: 10px;
-        width: 300px;
         border: 1px solid #ccc;
         border-radius: 4px;
+        flex: 1;
+        min-width: 200px;
+        background-color: white;
       }
 
-      .input-section button {
-        padding: 10px 20px;
-        background-color: #3a8eeb;
-        border: none;
-        border-radius: 4px;
-        color: white;
-        cursor: pointer;
-        margin-left: 10px;
-      }
-
-      /* BOX KANBAN */
-      .status-box {
-        display: flex;
-        justify-content: space-between;
+      /* ESTILOS DA DATATABLE */
+      .dataTables_wrapper {
         margin-top: 20px;
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+      }
+
+      #logsTable {
+        width: 100% !important;
+        border-collapse: collapse;
+      }
+
+      #logsTable thead th {
+        background-color: #0051b4 !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px !important;
+      }
+
+      #logsTable tbody td {
+        border-bottom: 1px solid #ddd !important;
+        padding: 12px !important;
+      }
+
+      #logsTable tbody tr:nth-child(even) {
+        background-color: #f7f9fc !important;
+      }
+
+      .dataTables_paginate .paginate_button {
+        padding: 8px 12px !important;
+        border: 1px solid #ddd !important;
+        border-radius: 4px !important;
+        margin-left: 5px !important;
+      }
+
+      .dataTables_paginate .paginate_button.current {
+        background-color: #0051b4 !important;
+        color: white !important;
+        border-color: #0051b4 !important;
       }
 
       .status {
-        width: 45%;
-        background-color: #f7f9fc;
-        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 4px 8px;
         border-radius: 4px;
-        padding: 10px;
+        font-weight: bold;
       }
 
-      .status h2 {
-        text-align: center;
-        background-color: #3a8eeb;
-        color: white;
-        margin-top: 0;
-        padding: 10px 0;
-        border-radius: 4px;
+      .status-error {
+        background-color: #ffd7d7;
+        color: #dc3545;
       }
-
-      
-        header button {
-        padding: 10px;
-        background-color: black;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin: 10px 0; 
-        max-width: 100%; /* Limite de largura */
-        box-sizing: border-box; /* Inclui padding e bordas na largura total */
-        overflow: hidden; /* Oculta o excesso de texto */
-        text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
-        white-space: nowrap; /* Evita quebras de linha */
-}
-      
-
-
+      .status-ok {
+        background-color: #d7ffd9;
+        color: #198754;
+      }
+      .status-warn {
+        background-color: #fff3cd;
+        color: #ffc107;
+      }
     </style>
-
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <header>
-          <img
-            src="../static/logo.png"
-            alt="Infra ID Logo"
-            class="logo"
-            width="150"
-            height="90"
-          />
-          <h1>SOLUÇÃO TEMPORÁRIA APLICADOR LPN</h1>
-  
-          <button onclick="redirecionar()">
-            ORDENS
-          </button>
-        </header>
-        <br /><br />
-  
-</body>
+      <header>
+        <img
+          src="../static/logo.png"
+          alt="Infra ID Logo"
+          class="logo"
+          width="150"
+          height="90"
+        />
+        <h1>SOLUÇÃO TEMPORÁRIA APLICADOR LPN</h1>
+        <button onclick="window.location.href='/'">ORDENS</button>
+      </header>
+
+      <div class="filters">
+        <input type="date" id="filterDate" />
+        <input type="text" id="filterOrder" placeholder="Filtrar por Ordem" />
+        <select id="filterStatus">
+          <option value="">Todos Status</option>
+          <option value="ERROR">ERROR</option>
+          <option value="OK">OK</option>
+          <option value="WARN">WARN</option>
+        </select>
+      </div>
+
+      <table id="logsTable" class="display">
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
+            <th>Ordem</th>
+            <th>Mensagem</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- jQuery + DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"
+    ></script>
+
+    <script>
+      function parseLog(content) {
+        return content
+          .split("\n")
+          .map((line) => {
+            const match = line.match(/\[(.*?)\]\s(.*)/);
+            if (!match) return null;
+
+            const [_, timestamp, message] = match;
+            let status = "OK";
+            let order = "-";
+
+            if (message.includes("Erro crítico")) status = "ERROR";
+            if (message.includes("ignorada") || message.includes("Falha"))
+              status = "WARN";
+
+            const orderMatch = message.match(/Ordem\s(\d+)/);
+            if (orderMatch) order = orderMatch[1];
+
+            return {
+              timestamp,
+              order,
+              message: message.replace(/(Ordem \d+|Erro crítico:)\s?/, ""),
+              status,
+            };
+          })
+          .filter(Boolean);
+      }
+
+      let table;
+      async function loadLogs(date) {
+        try {
+          const response = await fetch(`/get_log?date=${date || ""}`);
+          const data = await response.json();
+
+          if (data.error) throw new Error(data.error);
+
+          const logs = parseLog(data.content);
+
+          if ($.fn.DataTable.isDataTable("#logsTable")) {
+            table.destroy();
+          }
+
+          table = $("#logsTable").DataTable({
+            data: logs,
+            pageLength: 10,
+            language: {
+              url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json",
+            },
+            columns: [
+              { data: "timestamp" },
+              { data: "order" },
+              { data: "message" },
+              {
+                data: "status",
+                render: function (data) {
+                  return `<span class="status status-${data.toLowerCase()}">${data}</span>`;
+                },
+              },
+            ],
+            initComplete: function () {
+              // Aplica filtros iniciais
+              $("#filterOrder").on("keyup", function () {
+                table.column(1).search(this.value).draw();
+              });
+
+              $("#filterStatus").on("change", function () {
+                table.column(3).search(this.value).draw();
+              });
+            },
+          });
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      // Event Listeners
+      document.getElementById("filterDate").addEventListener("change", () => {
+        loadLogs(document.getElementById("filterDate").value);
+      });
+
+      // Initial load
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("filterDate").value = today;
+      loadLogs(today);
+    </script>
+  </body>
 </html>
