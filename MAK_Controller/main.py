@@ -1,4 +1,4 @@
-from modules.logger import log, log_alert
+from modules.logger import log
 from flask import Flask, render_template, jsonify, request
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -62,14 +62,14 @@ def move_order(order_id):
         elif len(files) == 1:
             file_to_move = files[0][0]
         else:
-            return jsonify({"status": "error", "message": "Ordem não encontrada"}), 404
+            return jsonify(f"Ordem {order_id} não encontrada"), 404, {'charset': 'utf-8'}
 
         move_to_input(file_to_move, overwrite=True)
         log(f"Ordem {order_id} movida manualmente")
-        return jsonify({"status": "success", "message": f"Ordem {order_id} movida!"})
+        return jsonify(f"Ordem {order_id} movida!"), 200, {'charset': 'utf-8'}
 
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({"status": "error", "message": str(e)}), 500, {'charset': 'utf-8'}
 
 @app.route('/logs')
 def logs():
@@ -88,17 +88,7 @@ def get_log():
         return jsonify({"content": content})
     
     except Exception as e:
-        return jsonify({"error": str(e)}), 404
-
-# main.py
-@app.route('/api/pending_actions')
-def get_pending_actions():
-    try:
-        with open("alerts.log", "r") as f:
-            alerts = [line.strip() for line in f.readlines()]
-        return jsonify({"alerts": alerts[-10:]})  # Retorna últimos 10 alertas
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)}), 404, {'charset': 'utf-8'}
 
 # Monitor de Arquivos
 class MakHandler(FileSystemEventHandler):
@@ -123,16 +113,15 @@ class MakHandler(FileSystemEventHandler):
                         break
                     except (BlockingIOError, PermissionError):
                         if attempt == max_retries - 1:
-                            error_msg = f"Falha ao processar {file_path} após {max_retries} tentativas"
+                            error_msg = f"Falha ao processar MAK165 - {new_order_id} após {max_retries} tentativas"
                             log(error_msg)
-                            log_alert(error_msg)
                         time.sleep(retry_delay)
             except IOError as e:
                 log(f"Erro de I/O: {str(e)}")
 
         if not success or not new_order_id:
-            alert_msg = f"ATENÇÃO: Arquivo {Path(file_path).name} requer ação manual!"
-            log_alert(alert_msg)
+            alert_msg = f"ATENÇÃO: Não foi possível realizar atualização automática do arquivo MAK165 - {new_order_id}. Realizar ação manual!"
+            log(alert_msg)
             return
 
         # Processar após fechar o arquivo
@@ -145,7 +134,7 @@ class MakHandler(FileSystemEventHandler):
                     if existing_id == new_order_id:
                         existing_files.append((existing_file, existing_date))
                 except Exception as e:
-                    log(f"Erro ao processar {existing_file}: {e}")
+                    log(f"Erro ao processar {existing_id}: {e}")
 
             if existing_files:
                 latest_file = max(existing_files, key=lambda x: x[1])
@@ -164,7 +153,6 @@ class MakHandler(FileSystemEventHandler):
             log(f"Erro ao processar {file_path}: {e}")
 
 if __name__ == '__main__':
-    Path("alerts.log").touch(exist_ok=True)
     observer = Observer()
     observer.schedule(MakHandler(), path=str(FOLDERS["waiting"]), recursive=False)
     observer.start()

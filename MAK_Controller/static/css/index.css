@@ -130,3 +130,16 @@ header button {
   background-color: #4054b2;
   color: white;
 }
+
+#notification {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    top: -100px;
+  }
+  to {
+    top: 120px;
+  }
+}

@@ -19,19 +19,19 @@ async function loadOrders() {
   document.getElementById("bw-table").innerHTML =
     bw.length > 0
       ? bw
-          .map((order) => {
-            // Verifica se a linha começa com "S"
-            if (order.linha.startsWith("S")) {
-              return `
+        .map((order) => {
+          // Verifica se a linha começa com "S"
+          if (order.linha.startsWith("S")) {
+            return `
             <tr>
               <td>${order.linha}</td>
               <td>${order.op}</td>
               <td>${order.sku}</td>
             </tr>
           `;
-            }
-          })
-          .join("")
+          }
+        })
+        .join("")
       : `
       <tr>
         <td colspan="3">Nenhuma Ordem em produção no momento</td>
@@ -41,19 +41,19 @@ async function loadOrders() {
   document.getElementById("pc-table").innerHTML =
     pc.length > 0
       ? pc
-          .map((order) => {
-            // Verifica se a linha começa com "D"
-            if (order.linha.startsWith("D")) {
-              return `
+        .map((order) => {
+          // Verifica se a linha começa com "D"
+          if (order.linha.startsWith("D")) {
+            return `
             <tr>
               <td>${order.linha}</td>
               <td>${order.op}</td>
               <td>${order.sku}</td>
             </tr>
           `;
-            }
-          })
-          .join("")
+          }
+        })
+        .join("")
       : `
       <tr>
         <td colspan="3">Nenhuma Ordem em produção no momento</td>
@@ -63,19 +63,19 @@ async function loadOrders() {
   document.getElementById("hc-table").innerHTML =
     hc.length > 0
       ? hc
-          .map((order) => {
-            // Verifica se a linha começa com "A
-            if (order.linha.startsWith("A")) {
-              return `
+        .map((order) => {
+          // Verifica se a linha começa com "A
+          if (order.linha.startsWith("A")) {
+            return `
             <tr>
               <td>${order.linha}</td>
               <td>${order.op}</td>
               <td>${order.sku}</td>
             </tr>
           `;
-            }
-          })
-          .join("")
+          }
+        })
+        .join("")
       : `
       <tr>
         <td colspan="3">Nenhuma Ordem em produção no momento</td>
@@ -84,38 +84,39 @@ async function loadOrders() {
 }
 
 async function moveOrder() {
-  const orderId = document.getElementById("orderInput").value;
-  const response = await fetch(`/move/${orderId}`);
-  alert(await response.text());
-  loadOrders(); // Atualiza a lista após mover
+  const orderId = document.getElementById('orderInput').value;
+  try {
+    const response = await fetch(`/move/${orderId}`);
+    const result = await response.text();
+    showNotification(result, response.status);
+  } catch (error) {
+    showNotification(error.message || 'Erro ao mover ordem', 'error');
+  }
+  loadOrders();
 }
 
-// Atualizar alertas a cada 30 segundos
-function updateAlerts() {
-  fetch("/api/pending_actions")
-    .then((response) => response.json())
-    .then((data) => {
-      const container = document.querySelector(".alert-container");
-      const list = document.getElementById("alertList");
+function showNotification(message, type = 'warning') {
+  const notification = document.getElementById('notification');
+  const notificationText = document.getElementById('notification-text');
 
-      if (data.alerts && data.alerts.length > 0) {
-        container.style.display = "block";
-        list.innerHTML = data.alerts
-          .map(
-            (alert) =>
-              `<div style="margin: 10px 0; padding: 10px; background: white; border-radius: 3px;">
-                    ${alert}
-                </div>`
-          )
-          .join("");
-      } else {
-        container.style.display = "none";
-      }
-    });
+  // Cores baseadas no tipo
+  const colors = {
+    404: '#ffd700',
+    500: '#dc3545',
+    200: '#28a745'
+  };
+
+  notification.style.backgroundColor = colors[type];
+  notificationText.textContent = message;
+  notification.style.display = 'block';
+
+  // Fecha automaticamente após 5 segundos
+  setTimeout(closeNotification, 5000);
 }
 
-setInterval(updateAlerts, 30000);
-updateAlerts(); // Carrega inicialmente
+function closeNotification() {
+  document.getElementById('notification').style.display = 'none';
+}
 
 setInterval(loadOrders, 5000); // Atualiza a cada 5 segundos
 loadOrders();
