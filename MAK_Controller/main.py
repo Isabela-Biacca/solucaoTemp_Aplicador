@@ -1,4 +1,4 @@
-from modules.logger import log
+from modules.logger import log, log_alert
 from flask import Flask, render_template, jsonify, request
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -108,39 +108,32 @@ class MakHandler(FileSystemEventHandler):
 
     def handle_file(self, file_path):
         max_retries = 5
-        retry_delay = 1  # segundos
+        retry_delay = 1
+        success = False
+        new_order_id = None  # Declaração necessária
 
         for attempt in range(max_retries):
             try:
                 with open(file_path, "r") as file:
                     try:
-                        # Tentar bloquear o arquivo não bloqueante
                         msvcrt.locking(file.fileno(), msvcrt.LK_NBLCK, 1)
+                        # Mova a leitura do order_id para dentro do bloco bem-sucedido
+                        new_order_id, new_creation_date, _, _ = get_production_order(file)
+                        success = True
+                        break
                     except (BlockingIOError, PermissionError):
                         if attempt == max_retries - 1:
-                            log(f"Arquivo {file_path} travado após {max_retries} tentativas. Ignorando.")
-                            return
+                            error_msg = f"Falha ao processar {file_path} após {max_retries} tentativas"
+                            log(error_msg)
+                            log_alert(error_msg)
                         time.sleep(retry_delay)
-                        continue
-
-                    # Ler os dados do arquivo
-                    try:
-                        new_order_id, new_creation_date, _, _ = get_production_order(file)
-                    except Exception as e:
-                        log(f"Erro ao processar {file_path}: {e}")
-                        return
-                    break  # Sai do loop se bem-sucedido
             except IOError as e:
-                if attempt == max_retries - 1:
-                    error_msg = f"Falha crítica: Arquivo {file_path} bloqueado após {max_retries} tentativas. Ação manual necessária!"
-                    log(error_msg)
-                    log_alert(error_msg)  # Registra como alerta
-                continue
+                log(f"Erro de I/O: {str(e)}")
 
-        # Após o loop de tentativas
-        if not success:
-            alert_msg = f"ATENÇÃO: Nova MAK165 em waiting para ordem {new_order_id} requer ação manual!"
+        if not success or not new_order_id:
+            alert_msg = f"ATENÇÃO: Arquivo {Path(file_path).name} requer ação manual!"
             log_alert(alert_msg)
+            return
 
         # Processar após fechar o arquivo
         try:
@@ -171,6 +164,7 @@ class MakHandler(FileSystemEventHandler):
             log(f"Erro ao processar {file_path}: {e}")
 
 if __name__ == '__main__':
+    Path("alerts.log").touch(exist_ok=True)
     observer = Observer()
     observer.schedule(MakHandler(), path=str(FOLDERS["waiting"]), recursive=False)
     observer.start()
