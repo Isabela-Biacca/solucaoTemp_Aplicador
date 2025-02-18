@@ -1,0 +1,132 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* CORPO */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ced7fd;
+  margin: 0;
+  height: max-content;
+  padding: 10px;
+}
+
+/* HEADER */
+header {
+  text-align: center;
+  background-color: #ffffff;
+  /* color: white; */
+  padding: 1.5%;
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap onto a new line if needed */
+  justify-content: space-between; /* Space out items evenly */
+  align-items: center; /* Align items vertically centered */
+}
+
+header img {
+  max-width: 100%; /* Make the logo responsive */
+  height: auto; /* Maintain the aspect ratio */
+}
+
+header h1 {
+  margin: 0;
+  padding: 15px; /* Reduced padding for smaller screens */
+  font-size: 2em; /* Responsive font size */
+  color: #001214;
+}
+
+header button {
+  padding: 10px;
+  background-color: #000852;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 0;
+  max-width: 100%; /* Limite de largura */
+  box-sizing: border-box; /* Inclui padding e bordas na largura total */
+  overflow: hidden; /* Oculta o excesso de texto */
+  text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
+  white-space: nowrap; /* Evita quebras de linha */
+}
+
+@media (max-width: 600px) {
+  header {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items */
+  }
+
+  header h1 {
+    font-size: 1.2em; /* Decrease font size */
+  }
+
+  header button {
+    width: 100%; /* Make the button full width on smaller screens */
+  }
+}
+
+/* INPUT */
+.input-section {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.input-section input {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-section button {
+  padding: 10px 20px;
+  background-color: #4054b2;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* BOX KANBAN */
+.status-box {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.status {
+  width: 30%;
+  background-color: #f7f9fc;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.status h2 {
+  text-align: center;
+  background-color: #4054b2;
+  color: white;
+  margin-top: 0;
+  padding: 10px 0;
+  border-radius: 4px;
+}
+
+.status table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.status th,
+.status td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.status th {
+  background-color: #4054b2;
+  color: white;
+}
