@@ -178,7 +178,7 @@
             width: 5vw;
             height: 6vh;
           "
-          onclick="redirecionar()"
+          onclick="window.location.href = '/logs'"
         >
           LOG
         </button>
@@ -242,10 +242,6 @@
     </div>
 
     <script>
-      function redirecionar() {
-        window.location.href = "/logs"; // Substitua pela URL desejada
-      }
-
       async function loadOrders() {
         const response = await fetch("/api/orders");
         const data = await response.json();
