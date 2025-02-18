@@ -90,6 +90,16 @@ def get_log():
     except Exception as e:
         return jsonify({"error": str(e)}), 404
 
+# main.py
+@app.route('/api/pending_actions')
+def get_pending_actions():
+    try:
+        with open("alerts.log", "r") as f:
+            alerts = [line.strip() for line in f.readlines()]
+        return jsonify({"alerts": alerts[-10:]})  # Retorna últimos 10 alertas
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 # Monitor de Arquivos
 class MakHandler(FileSystemEventHandler):
     def on_created(self, event):
@@ -122,12 +132,15 @@ class MakHandler(FileSystemEventHandler):
                     break  # Sai do loop se bem-sucedido
             except IOError as e:
                 if attempt == max_retries - 1:
-                    log(f"Falha ao abrir {file_path} após {max_retries} tentativas: {e}")
-                    return
-                time.sleep(retry_delay)
-        else:
-            log(f"Não foi possível abrir {file_path} após {max_retries} tentativas.")
-            return
+                    error_msg = f"Falha crítica: Arquivo {file_path} bloqueado após {max_retries} tentativas. Ação manual necessária!"
+                    log(error_msg)
+                    log_alert(error_msg)  # Registra como alerta
+                continue
+
+        # Após o loop de tentativas
+        if not success:
+            alert_msg = f"ATENÇÃO: Nova MAK165 em waiting para ordem {new_order_id} requer ação manual!"
+            log_alert(alert_msg)
 
         # Processar após fechar o arquivo
         try:

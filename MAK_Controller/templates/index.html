@@ -151,6 +151,25 @@
         />
         <h1>SOLUÇÃO TEMPORÁRIA APLICADOR LPN</h1>
 
+        <div
+          class="alert-container"
+          style="
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 400px;
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+          "
+        >
+          <h3 style="margin-top: 0; color: #856404">⚠️ Ações Pendentes</h3>
+          <div id="alertList"></div>
+        </div>
+
         <button
           style="
             color: white;
@@ -318,6 +337,33 @@
         alert(await response.text());
         loadOrders(); // Atualiza a lista após mover
       }
+
+      // Atualizar alertas a cada 30 segundos
+      function updateAlerts() {
+        fetch("/api/pending_actions")
+          .then((response) => response.json())
+          .then((data) => {
+            const container = document.querySelector(".alert-container");
+            const list = document.getElementById("alertList");
+
+            if (data.alerts && data.alerts.length > 0) {
+              container.style.display = "block";
+              list.innerHTML = data.alerts
+                .map(
+                  (alert) =>
+                    `<div style="margin: 10px 0; padding: 10px; background: white; border-radius: 3px;">
+                        ${alert}
+                    </div>`
+                )
+                .join("");
+            } else {
+              container.style.display = "none";
+            }
+          });
+      }
+
+      setInterval(updateAlerts, 30000);
+      updateAlerts(); // Carrega inicialmente
 
       setInterval(loadOrders, 5000); // Atualiza a cada 5 segundos
       loadOrders();
