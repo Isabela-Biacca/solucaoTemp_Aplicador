@@ -16,6 +16,27 @@ async function loadOrders() {
     }
   });
 
+  // Ordenar BW (linhas S) numericamente
+  bw.sort((a, b) => {
+    const numA = parseInt(a.linha.replace(/^\D+/g, '')),
+      numB = parseInt(b.linha.replace(/^\D+/g, ''));
+    return numA - numB;
+  });
+
+  // Ordenar PC (linhas D) numericamente
+  pc.sort((a, b) => {
+    const numA = parseInt(a.linha.replace(/^\D+/g, '')),
+      numB = parseInt(b.linha.replace(/^\D+/g, ''));
+    return numA - numB;
+  });
+
+  // Ordenar HC (linhas A) numericamente
+  hc.sort((a, b) => {
+    const numA = parseInt(a.linha.replace(/^\D+/g, '')),
+      numB = parseInt(b.linha.replace(/^\D+/g, ''));
+    return numA - numB;
+  });
+
   document.getElementById("bw-table").innerHTML =
     bw.length > 0
       ? bw
