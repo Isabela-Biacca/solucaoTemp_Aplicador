@@ -48,6 +48,9 @@ async function loadOrders() {
               <td>${order.linha}</td>
               <td>${order.op}</td>
               <td>${order.sku}</td>
+              <td>
+                <button class="btn-encerrar" onclick="encerrarOrdem('${order.op}', this)">Encerrar</button>
+              </td>
             </tr>
           `;
           }
@@ -55,7 +58,7 @@ async function loadOrders() {
         .join("")
       : `
       <tr>
-        <td colspan="3">Nenhuma Ordem em produção no momento</td>
+        <td colspan="4">Nenhuma Ordem em produção no momento</td>
       </tr>
     `;
 
@@ -70,6 +73,9 @@ async function loadOrders() {
               <td>${order.linha}</td>
               <td>${order.op}</td>
               <td>${order.sku}</td>
+              <td>
+                <button class="btn-encerrar" onclick="encerrarOrdem('${order.op}', this)">Encerrar</button>
+              </td>
             </tr>
           `;
           }
@@ -77,7 +83,7 @@ async function loadOrders() {
         .join("")
       : `
       <tr>
-        <td colspan="3">Nenhuma Ordem em produção no momento</td>
+        <td colspan="4">Nenhuma Ordem em produção no momento</td>
       </tr>
     `;
 
@@ -92,6 +98,9 @@ async function loadOrders() {
               <td>${order.linha}</td>
               <td>${order.op}</td>
               <td>${order.sku}</td>
+              <td>
+                <button class="btn-encerrar" onclick="encerrarOrdem('${order.op}', this)">Encerrar</button>
+              </td>
             </tr>
           `;
           }
@@ -99,7 +108,7 @@ async function loadOrders() {
         .join("")
       : `
       <tr>
-        <td colspan="3">Nenhuma Ordem em produção no momento</td>
+        <td colspan="4">Nenhuma Ordem em produção no momento</td>
       </tr>
     `;
 }
@@ -114,6 +123,25 @@ async function moveOrder() {
     showNotification(error.message || 'Erro ao mover ordem', 'error');
   }
   loadOrders();
+}
+
+async function encerrarOrdem(orderId, button) {
+  if (!confirm(`Deseja realmente encerrar a ordem ${orderId}?`)) return;
+
+  button.disabled = true;
+  button.textContent = 'Processando...';
+
+  try {
+    const response = await fetch(`/encerrar/${orderId}`);
+    const result = await response.text();
+    showNotification(result, response.status);
+    loadOrders();
+  } catch (error) {
+    showNotification(error.message || 'Erro ao encerrar ordem', 'error');
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Encerrar';
+  }
 }
 
 function showNotification(message, type = 'warning') {

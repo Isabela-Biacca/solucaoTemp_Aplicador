@@ -7,6 +7,7 @@ from modules.file_manager import move_to_input
 from config import FOLDERS
 from datetime import datetime
 from pathlib import Path
+import shutil
 import threading
 import os
 import msvcrt
@@ -62,11 +63,39 @@ def move_order(order_id):
         elif len(files) == 1:
             file_to_move = files[0][0]
         else:
-            return jsonify(f"Ordem {order_id} não encontrada"), 404, {'charset': 'utf-8'}
+            return jsonify(f"Ordem {order_id} nao encontrada"), 404, {'charset': 'utf-8'}
 
         move_to_input(file_to_move, overwrite=True)
         log(f"Ordem {order_id} movida manualmente")
         return jsonify(f"Ordem {order_id} movida!"), 200, {'charset': 'utf-8'}
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500, {'charset': 'utf-8'}
+
+@app.route('/encerrar/<order_id>')
+def encerrar_ordem(order_id):
+    try:
+        # Encontrar o arquivo na pasta input
+        input_folder = Path(FOLDERS["input"])
+        target_file = None
+        
+        for file in input_folder.glob("*.xml"):
+            current_id, _, _, _ = get_production_order(file)
+            if current_id == order_id:
+                target_file = file
+                break
+
+        if not target_file:
+            return jsonify(f"Ordem {order_id} nao encontrada"), 404, {'charset': 'utf-8'}
+
+        # Criar pasta backup se não existir
+        backup_dir = Path(FOLDERS["input"]) / "backup"
+        backup_dir.mkdir(exist_ok=True)
+        
+        # Mover arquivo
+        shutil.move(str(target_file), str(backup_dir / target_file.name))
+        log(f"Ordem {order_id} encerrada e movida para backup")
+        return jsonify(f"Ordem {order_id} encerrada com sucesso!"), 200, {'charset': 'utf-8'}
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500, {'charset': 'utf-8'}
@@ -120,7 +149,7 @@ class MakHandler(FileSystemEventHandler):
                 log(f"Erro de I/O: {str(e)}")
 
         if not success or not new_order_id:
-            alert_msg = f"ATENÇÃO: Não foi possível realizar atualização automática do arquivo MAK165 - {new_order_id}. Realizar ação manual!"
+            alert_msg = f"ATENÇÃO: Nao foi possível realizar atualização automática do arquivo MAK165 - {new_order_id}. Realizar ação manual!"
             log(alert_msg)
             return
 
