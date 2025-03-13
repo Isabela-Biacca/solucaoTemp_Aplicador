@@ -35,8 +35,21 @@ def api_orders():
 
     for file in Path(FOLDERS["input"]).glob("*.xml"):
         try:
-            op, creation_date, sku, linha = get_production_order(file)
-            input_orders.append({"op": op, "data": creation_date, "sku": sku, "linha": linha})
+            op, _, sku, linha = get_production_order(file)
+             # Ler o timestamp do arquivo .meta
+            meta_file = file.with_suffix('.meta')
+            if meta_file.exists():
+                with open(meta_file, 'r', encoding='utf-8') as f:
+                    move_time = f.read().strip()
+            else:
+                move_time = "N/A"
+                
+            input_orders.append({
+                "op": op,
+                "data": move_time,  # Usar o timestamp registrado
+                "sku": sku,
+                "linha": linha
+            })
         except Exception as e:
             log(f"Erro ao processar {file}: {e}")
             
@@ -64,10 +77,23 @@ def move_order(order_id):
             file_to_move = files[0][0]
         else:
             return jsonify(f"Ordem {order_id} nao encontrada"), 404, {'charset': 'utf-8'}
+        
+        target_dir = Path(FOLDERS["input"])
+        
+         # Registrar timestamp exato
+        move_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Modificar o arquivo ou criar um registro associado
+        target_file = target_dir / file_to_move.name
+        with open(target_file.with_suffix('.meta'), 'w', encoding='utf-8') as f:
+            f.write(move_time)
 
         move_to_input(file_to_move, overwrite=True)
         log(f"Ordem {order_id} movida manualmente")
-        return jsonify(f"Ordem {order_id} movida!"), 200, {'charset': 'utf-8'}
+        return jsonify({
+            "message": f"Ordem {order_id} movida!",
+            "timestamp": move_time  # Enviar para o frontend
+        }), 200, {'charset': 'utf-8'}
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500, {'charset': 'utf-8'}
@@ -79,6 +105,7 @@ def encerrar_ordem(order_id):
         input_folder = Path(FOLDERS["input"])
         target_file = None
         
+        # Encontrar o arquivo XML
         for file in input_folder.glob("*.xml"):
             current_id, _, _, _ = get_production_order(file)
             if current_id == order_id:
@@ -87,6 +114,15 @@ def encerrar_ordem(order_id):
 
         if not target_file:
             return jsonify(f"Ordem {order_id} nao encontrada"), 404, {'charset': 'utf-8'}
+
+        # Deletar arquivo .meta associado
+        meta_file = target_file.with_suffix('.meta')  # Corrige o nome do meta
+        if meta_file.exists():
+            try:
+                meta_file.unlink()
+                log(f"Arquivo meta removido: {meta_file.name}")
+            except Exception as e:
+                log(f"Erro ao remover meta: {str(e)}")
 
         # Criar pasta backup se não existir
         backup_dir = Path(FOLDERS["input"]) / "backup"

@@ -48,6 +48,7 @@ async function loadOrders() {
               <td>${order.linha}</td>
               <td>${order.op}</td>
               <td>${order.sku}</td>
+              <td>${order.data}</td>
               <td>
                 <button class="btn-encerrar" onclick="encerrarOrdem('${order.op}', this)">Encerrar</button>
               </td>
@@ -58,7 +59,7 @@ async function loadOrders() {
         .join("")
       : `
       <tr>
-        <td colspan="4">Nenhuma Ordem em produção no momento</td>
+        <td colspan="5">Nenhuma Ordem em produção no momento</td>
       </tr>
     `;
 
@@ -73,6 +74,7 @@ async function loadOrders() {
               <td>${order.linha}</td>
               <td>${order.op}</td>
               <td>${order.sku}</td>
+              <td>${order.data}</td>
               <td>
                 <button class="btn-encerrar" onclick="encerrarOrdem('${order.op}', this)">Encerrar</button>
               </td>
@@ -83,7 +85,7 @@ async function loadOrders() {
         .join("")
       : `
       <tr>
-        <td colspan="4">Nenhuma Ordem em produção no momento</td>
+        <td colspan="5">Nenhuma Ordem em produção no momento</td>
       </tr>
     `;
 
@@ -98,6 +100,7 @@ async function loadOrders() {
               <td>${order.linha}</td>
               <td>${order.op}</td>
               <td>${order.sku}</td>
+              <td>${order.data}</td>
               <td>
                 <button class="btn-encerrar" onclick="encerrarOrdem('${order.op}', this)">Encerrar</button>
               </td>
@@ -108,21 +111,35 @@ async function loadOrders() {
         .join("")
       : `
       <tr>
-        <td colspan="4">Nenhuma Ordem em produção no momento</td>
+        <td colspan="5">Nenhuma Ordem em produção no momento</td>
       </tr>
     `;
 }
 
 async function moveOrder() {
   const orderId = document.getElementById('orderInput').value;
+
   try {
     const response = await fetch(`/move/${orderId}`);
-    const result = await response.text();
-    showNotification(result, response.status);
+    const result = await response.json();
+    showNotification(result.message, response.status);
   } catch (error) {
     showNotification(error.message || 'Erro ao mover ordem', 'error');
   }
   loadOrders();
+}
+
+document.getElementById('orderInput').addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // Impede o comportamento padrão do formulário
+    moveOrder();
+    this.value = ""; // Limpa o campo de input
+  }
+});
+
+function moveOrderAndClear() {
+  moveOrder(); // Chama a função para mover a ordem
+  document.getElementById('orderInput').value = ""; // Limpa o campo de input
 }
 
 async function encerrarOrdem(orderId, button) {
