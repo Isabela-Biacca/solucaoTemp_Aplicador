@@ -26,6 +26,7 @@ def api_orders():
     waiting_orders = []
     input_orders = []
     
+    # Para arquivos em waiting
     for file in Path(FOLDERS["waiting"]).glob("*.xml"):
         try:
             op, creation_date, sku, linha = get_production_order(file)
@@ -33,20 +34,23 @@ def api_orders():
         except Exception as e:
             log(f"Erro ao processar {file}: {e}")
 
+    # Para arquivos em input
     for file in Path(FOLDERS["input"]).glob("*.xml"):
         try:
             op, _, sku, linha = get_production_order(file)
-             # Ler o timestamp do arquivo .meta
-            meta_file = file.with_suffix('.meta')
+            # Procurar meta correspondente no backup
+            backup_dir = Path(FOLDERS["input"]) / "backup"
+            meta_file = backup_dir / f"OP_{op}.meta"
+            
+            move_time = "N/A"
             if meta_file.exists():
                 with open(meta_file, 'r', encoding='utf-8') as f:
-                    move_time = f.read().strip()
-            else:
-                move_time = "N/A"
-                
+                    content = f.read().strip()
+                    move_time = content.split('|')[-1]  # Extrair apenas a data
+                    
             input_orders.append({
                 "op": op,
-                "data": move_time,  # Usar o timestamp registrado
+                "data": move_time,
                 "sku": sku,
                 "linha": linha
             })
@@ -77,16 +81,22 @@ def move_order(order_id):
             file_to_move = files[0][0]
         else:
             return jsonify(f"Ordem {order_id} nao encontrada"), 404, {'charset': 'utf-8'}
+                
         
-        target_dir = Path(FOLDERS["input"])
         
-         # Registrar timestamp exato
-        move_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+         # Criar pasta backup se não existir
+        backup_dir = Path(FOLDERS["input"]) / "backup"
+        backup_dir.mkdir(exist_ok=True)
         
-        # Modificar o arquivo ou criar um registro associado
-        target_file = target_dir / file_to_move.name
-        with open(target_file.with_suffix('.meta'), 'w', encoding='utf-8') as f:
-            f.write(move_time)
+        # Registrar timestamp exato
+        move_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+        # Criar/atualizar meta no backup
+        meta_content = f"{order_id}|{move_time}"
+        meta_file = backup_dir / f"OP_{order_id}.meta"
+        
+        with open(meta_file, 'w', encoding='utf-8') as f:
+            f.write(meta_content)
 
         move_to_input(file_to_move, overwrite=True)
         log(f"Ordem {order_id} movida manualmente")
@@ -103,9 +113,10 @@ def encerrar_ordem(order_id):
     try:
         # Encontrar o arquivo na pasta input
         input_folder = Path(FOLDERS["input"])
-        target_file = None
+        backup_dir = input_folder / "backup"
+        backup_dir.mkdir(exist_ok=True)
         
-        # Encontrar o arquivo XML
+        # Procurar e mover o XML
         for file in input_folder.glob("*.xml"):
             current_id, _, _, _ = get_production_order(file)
             if current_id == order_id:
@@ -115,18 +126,14 @@ def encerrar_ordem(order_id):
         if not target_file:
             return jsonify(f"Ordem {order_id} nao encontrada"), 404, {'charset': 'utf-8'}
 
-        # Deletar arquivo .meta associado
-        meta_file = target_file.with_suffix('.meta')  # Corrige o nome do meta
+        # Deletar meta correspondente no backup
+        meta_file = backup_dir / f"OP_{order_id}.meta"
         if meta_file.exists():
             try:
                 meta_file.unlink()
-                log(f"Arquivo meta removido: {meta_file.name}")
+                log(f"Meta removido: {meta_file.name}")
             except Exception as e:
                 log(f"Erro ao remover meta: {str(e)}")
-
-        # Criar pasta backup se não existir
-        backup_dir = Path(FOLDERS["input"]) / "backup"
-        backup_dir.mkdir(exist_ok=True)
         
         # Mover arquivo
         shutil.move(str(target_file), str(backup_dir / target_file.name))
