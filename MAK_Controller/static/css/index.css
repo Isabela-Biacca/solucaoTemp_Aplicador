@@ -147,6 +147,78 @@ header button {
   background-color: #bb2d3b;
 }
 
+/* Estilos para a seção de ordens encerradas - Atualizado */
+.closed-orders {
+  margin: 20px auto;
+  width: 33%;
+  background-color: #f7f9fc;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.btn-ver-encerradas {
+  position: absolute;
+  right: 10px;
+  background-color: #4054b2;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: background-color 0.3s;
+}
+
+.btn-ver-encerradas:hover {
+  background-color: #2c3875;
+}
+
+.btn-reativar {
+  background-color: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-reativar:hover {
+  background-color: #1e7e34;
+}
+
+.closed-orders h2 {
+  text-align: center;
+  background-color: #4054b2;
+  color: white;
+  margin-top: 0;
+  padding: 10px 0;
+  border-radius: 4px;
+}
+
+.closed-orders table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.closed-orders th,
+.closed-orders td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.closed-orders th {
+  background-color: #4054b2;
+  color: white;
+}
+
+.closed-orders tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
 /* Ajuste das colunas */
 .status th:nth-child(4),
 .status td:nth-child(4) {

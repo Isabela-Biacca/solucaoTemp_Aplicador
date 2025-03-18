@@ -78,6 +78,11 @@
         <button onclick="moveOrderAndClear()">Enviar</button>
       </div>
 
+      <button onclick="toggleClosedOrders()" class="btn-ver-encerradas">
+        Ver Ordens Encerradas
+      </button>
+
+      <br />
       <br />
 
       <div class="status-box">
@@ -131,6 +136,25 @@
           </table>
         </div>
       </div>
+      <div
+          class="closed-orders"
+          id="closed-orders-section"
+          style="display: none"
+        >
+          <h2>Últimas Ordens Encerradas</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Linha</th>
+                <th>Ordem</th>
+                <th>SKU</th>
+                <th>Encerrada em</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="closed-orders-table"></tbody>
+          </table>
+        </div>
     </div>
   </body>
 </html>

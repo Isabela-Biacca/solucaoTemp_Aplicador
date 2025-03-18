@@ -159,6 +159,49 @@ async function encerrarOrdem(orderId, button) {
     button.disabled = false;
     button.textContent = 'Encerrar';
   }
+  loadClosedOrders()
+}
+
+async function loadClosedOrders() {
+  const response = await fetch("/api/closed_orders");
+  const data = await response.json();
+
+  const closedTable = document.getElementById("closed-orders-table");
+  closedTable.innerHTML = data.closed.length > 0
+    ? data.closed.map(order => `
+          <tr>
+              <td>${order.linha}</td>
+              <td>${order.op}</td>
+              <td>${order.sku}</td>
+              <td>${order.data}</td>
+              <td>
+                  <button class="btn-reativar" onclick="reativarOrdem('${order.op}')">Reativar</button>
+              </td>
+          </tr>
+      `).join("")
+    : `<tr><td colspan="5">Nenhuma ordem encerrada recentemente</td></tr>`;
+}
+
+function toggleClosedOrders() {
+  const section = document.getElementById("closed-orders-section");
+  section.style.display = section.style.display === "none" ? "block" : "none";
+  if (section.style.display === "block") {
+    loadClosedOrders();
+  }
+}
+
+async function reativarOrdem(orderId) {
+  if (!confirm(`Deseja reativar a ordem ${orderId}?`)) return;
+
+  try {
+    const response = await fetch(`/reactivate/${orderId}`);
+    const result = await response.text();
+    showNotification(result, response.status);
+    loadClosedOrders(); // Atualiza a lista de encerradas
+    loadOrders(); // Atualiza a lista principal
+  } catch (error) {
+    showNotification(error.message || 'Erro ao reativar ordem', 'error');
+  }
 }
 
 function showNotification(message, type = 'warning') {

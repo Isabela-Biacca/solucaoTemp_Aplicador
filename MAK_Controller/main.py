@@ -143,6 +143,68 @@ def encerrar_ordem(order_id):
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500, {'charset': 'utf-8'}
 
+@app.route('/api/closed_orders')
+def api_closed_orders():
+    closed_orders = []
+    backup_dir = Path(FOLDERS["input"]) / "backup"
+    
+    for file in backup_dir.glob("*.xml"):
+        try:
+            op, _, sku, linha = get_production_order(file)
+            # Obter data do meta ou do arquivo
+            meta_file = backup_dir / f"OP_{op}.meta"
+            
+            if meta_file.exists():
+                with open(meta_file, 'r') as f:
+                    move_time = f.read().split('|')[-1].strip()
+            else:
+                move_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Usar hora atual
+            
+            closed_orders.append({
+                "op": op,
+                "data": move_time,
+                "sku": sku,
+                "linha": linha,
+                "timestamp": datetime.strptime(move_time, '%Y-%m-%d %H:%M:%S')
+            })
+        except Exception as e:
+            log(f"Erro ao processar arquivo encerrado {file}: {e}")
+    
+    # Ordenar por timestamp e pegar 5 mais recentes
+    closed_orders.sort(key=lambda x: x["timestamp"], reverse=True)
+    return jsonify({"closed": closed_orders[:5]})
+
+@app.route('/reactivate/<order_id>')
+def reactivate_order(order_id):
+    try:
+        backup_dir = Path(FOLDERS["input"]) / "backup"
+        target_file = None
+        
+        # Procurar o arquivo no backup
+        for file in backup_dir.glob("*.xml"):
+            current_id, _, _, _ = get_production_order(file)
+            if current_id == order_id:
+                target_file = file
+                break
+
+        if not target_file:
+            return jsonify(f"Ordem {order_id} não encontrada no backup"), 404
+
+        # Mover diretamente para input
+        shutil.move(str(target_file), str(Path(FOLDERS["input"]) / target_file.name))
+        
+        # Recriar meta atualizado
+        meta_content = f"{order_id}|{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        meta_file = backup_dir / f"OP_{order_id}.meta"
+        with open(meta_file, 'w') as f:
+            f.write(meta_content)
+        
+        log(f"Ordem {order_id} reativada para input")
+        return jsonify(f"Ordem {order_id} reativada com sucesso!"), 200
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 @app.route('/logs')
 def logs():
     return render_template('log.html')
