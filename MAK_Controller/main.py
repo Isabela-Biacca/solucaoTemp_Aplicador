@@ -80,7 +80,7 @@ def move_order(order_id):
         elif len(files) == 1:
             file_to_move = files[0][0]
         else:
-            return jsonify(f"Ordem {order_id} nao encontrada"), 404, {'charset': 'utf-8'}
+            return jsonify({"message": f"Ordem {order_id} nao encontrada"}), 404, {'charset': 'utf-8'}
                 
         
         
@@ -138,10 +138,51 @@ def encerrar_ordem(order_id):
         # Mover arquivo
         shutil.move(str(target_file), str(backup_dir / target_file.name))
         log(f"Ordem {order_id} encerrada e movida para backup")
-        return jsonify(f"Ordem {order_id} encerrada com sucesso!"), 200, {'charset': 'utf-8'}
+        return jsonify({"message": f"Ordem {order_id} encerrada com sucesso!"}), 200, {'charset': 'utf-8'}
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500, {'charset': 'utf-8'}
+
+@app.route('/recuperar/<order_id>')
+def recuperar_ordem(order_id):
+    try:
+        backup_dir = Path(FOLDERS["input"]) / "backup"
+        files = []
+        
+        # 1. Buscar XMLs no backup
+        for file in backup_dir.glob("*.xml"):
+            try:
+                current_id, creation_date, _, _ = get_production_order(file)
+                if current_id == order_id:
+                    files.append((file, creation_date))
+            except Exception as e:
+                log(f"Erro ao processar {file}: {e}")
+
+        if not files:
+            return jsonify({"message": f"Ordem {order_id} não encontrada no backup"}), 404
+
+        # 2. Selecionar versão mais recente
+        latest_file = max(files, key=lambda x: x[1])
+        file_to_move = latest_file[0]
+
+        # 3. Mover diretamente para input (usando a lógica de substituição existente)
+        move_to_input(file_to_move, overwrite=True)
+
+        # 4. Atualizar/criar novo meta com status de reinício
+        new_meta_content = f"{order_id}|REINICIADA/ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        new_meta_file = backup_dir / f"OP_{order_id}.meta"
+        
+        with open(new_meta_file, 'w') as f:
+            f.write(new_meta_content)
+
+        log(f"Ordem {order_id} reiniciada do backup")
+        return jsonify({
+            "message": f"Ordem {order_id} reiniciada com sucesso!",
+            "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }), 200
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/logs')
 def logs():

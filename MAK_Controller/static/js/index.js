@@ -133,7 +133,6 @@ document.getElementById('orderInput').addEventListener('keypress', function (e) 
   if (e.key === 'Enter') {
     e.preventDefault(); // Impede o comportamento padrão do formulário
     moveOrder();
-    this.value = ""; // Limpa o campo de input
   }
 });
 
@@ -159,6 +158,34 @@ async function encerrarOrdem(orderId, button) {
     button.disabled = false;
     button.textContent = 'Encerrar';
   }
+}
+
+// index.js
+async function recoverOrder() {
+  const orderId = document.getElementById('recoverInput').value;
+
+  try {
+    const response = await fetch(`/recuperar/${orderId}`);
+    const result = await response.json();
+    showNotification(result.message, response.status);
+
+    // Forçar processamento automático pelo observer
+    setTimeout(loadOrders, 2000); // Aguardar 2s para atualização
+  } catch (error) {
+    showNotification(error.message || 'Erro ao recuperar ordem', 'error');
+  }
+}
+
+document.getElementById('recoverInput').addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    recoverOrderAndClear();
+  }
+});
+
+function recoverOrderAndClear() {
+  recoverOrder();
+  document.getElementById('recoverInput').value = "";
 }
 
 function showNotification(message, type = 'warning') {
