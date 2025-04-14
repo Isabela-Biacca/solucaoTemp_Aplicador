@@ -148,9 +148,10 @@ async function encerrarOrdem(orderId, button) {
   button.textContent = 'Processando...';
 
   try {
+    debugger
     const response = await fetch(`/encerrar/${orderId}`);
-    const result = await response.text();
-    showNotification(result, response.status);
+    const result = await response.json();
+    showNotification(result.message, response.status);
     loadOrders();
   } catch (error) {
     showNotification(error.message || 'Erro ao encerrar ordem', 'error');
@@ -165,6 +166,7 @@ async function recoverOrder() {
   const orderId = document.getElementById('recoverInput').value;
 
   try {
+    debugger
     const response = await fetch(`/recuperar/${orderId}`);
     const result = await response.json();
     showNotification(result.message, response.status);

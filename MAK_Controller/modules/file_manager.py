@@ -47,7 +47,7 @@ def move_to_input(source_file: Path, overwrite: bool = False) -> None:
         # Mover o novo arquivo
         target = target_dir / source_file.name
         shutil.move(str(source_file), str(target))
-        print(f"Arquivo {source_file.name} movido com sucesso!")
+        print(f"Ordem {new_op} movida para input com sucesso!")
 
     except Exception as e:
         print(f"Falha crítica ao processar {source_file.name}: {str(e)}")

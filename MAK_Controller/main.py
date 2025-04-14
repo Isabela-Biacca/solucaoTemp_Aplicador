@@ -7,6 +7,7 @@ from modules.file_manager import move_to_input
 from config import FOLDERS
 from datetime import datetime
 from pathlib import Path
+from waitress import serve
 import shutil
 import threading
 import os
@@ -98,6 +99,7 @@ def move_order(order_id):
         with open(meta_file, 'w', encoding='utf-8') as f:
             f.write(meta_content)
 
+        print(f"Ordem iniciada:")
         move_to_input(file_to_move, overwrite=True)
         log(f"Ordem {order_id} movida manualmente")
         return jsonify({
@@ -137,8 +139,12 @@ def encerrar_ordem(order_id):
         
         # Mover arquivo
         shutil.move(str(target_file), str(backup_dir / target_file.name))
+        print(f"Ordem {order_id} encerrada e movida para backup")
         log(f"Ordem {order_id} encerrada e movida para backup")
-        return jsonify({"message": f"Ordem {order_id} encerrada com sucesso!"}), 200, {'charset': 'utf-8'}
+        return jsonify({
+            "message": f"Ordem {order_id} encerrada com sucesso!",
+            "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }), 200, {'charset': 'utf-8'}
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500, {'charset': 'utf-8'}
@@ -166,6 +172,7 @@ def recuperar_ordem(order_id):
         file_to_move = latest_file[0]
 
         # 3. Mover diretamente para input (usando a lógica de substituição existente)
+        print(f"Ordem recuperada:")
         move_to_input(file_to_move, overwrite=True)
 
         # 4. Atualizar/criar novo meta com status de reinício
@@ -266,8 +273,25 @@ class MakHandler(FileSystemEventHandler):
             log(f"Erro ao processar {file_path}: {e}")
 
 if __name__ == '__main__':
+    app.config['DEBUG'] = False 
+    app.config['ENV'] = 'production'
+    
+    print("🟢 Iniciando monitoramento de arquivos...")
     observer = Observer()
     observer.schedule(MakHandler(), path=str(FOLDERS["waiting"]), recursive=False)
     observer.start()
+    print(f"✅ Monitor ativo na pasta: {FOLDERS['waiting']}")
+
+    from waitress import serve
+    print("\n🚀 Inicializando servidor...")
+    print(f"🔗 Acesso disponível em: http://172.16.16.70:8085")
+    print("📡 Aguardando conexões...\n")
     
+    # serve(
+    #     app,
+    #     host='172.16.16.70',
+    #     port=8085,
+    #     threads=6,
+    #     ident="Sistema LPN"  # Nome personalizado nos logs
+    # )
     app.run(host='localhost', port=5000, debug=True, threaded=True)
