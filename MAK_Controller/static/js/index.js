@@ -124,7 +124,7 @@ async function moveOrder() {
     const result = await response.json();
     showNotification(result.message, response.status);
   } catch (error) {
-    showNotification(error.message || 'Erro ao mover ordem', 'error');
+    showNotification(error.message || 'Erro ao mover ordem', 500);
   }
   loadOrders();
 }
@@ -154,7 +154,7 @@ async function encerrarOrdem(orderId, button) {
     showNotification(result.message, response.status);
     loadOrders();
   } catch (error) {
-    showNotification(error.message || 'Erro ao encerrar ordem', 'error');
+    showNotification(error.message || 'Erro ao encerrar ordem', 500);
   } finally {
     button.disabled = false;
     button.textContent = 'Encerrar';
@@ -174,7 +174,7 @@ async function recoverOrder() {
     // Forçar processamento automático pelo observer
     setTimeout(loadOrders, 2000); // Aguardar 2s para atualização
   } catch (error) {
-    showNotification(error.message || 'Erro ao recuperar ordem', 'error');
+    showNotification(error.message || 'Erro ao recuperar ordem', 500);
   }
 }
 
@@ -190,7 +190,7 @@ function recoverOrderAndClear() {
   document.getElementById('recoverInput').value = "";
 }
 
-function showNotification(message, type = 'warning') {
+function showNotification(message, type = 404) {
   const notification = document.getElementById('notification');
   const notificationText = document.getElementById('notification-text');
 
