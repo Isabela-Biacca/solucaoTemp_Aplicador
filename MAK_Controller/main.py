@@ -310,7 +310,7 @@ if __name__ == '__main__':
     print("📡 Aguardando conexões...\n")
     
     # Agendamento para toda primeira quinta do mês
-    print("🧼 Agendando limpeza mensal de arquivos MAK165...")
+    print("🧼 Agendando limpeza semanal de arquivos MAK165...")
     scheduler = BackgroundScheduler()
     scheduler.add_job(
         clean_old_mak_files,
@@ -321,7 +321,7 @@ if __name__ == '__main__':
     )
     
     scheduler.start()
-    print(f"✅ Limpeza agendada: toda primeira quinta-feira do mês às 00:00")
+    print(f"✅ Limpeza agendada: toda quinta-feira às 00:00")
     
     # serve(
     #     app,
