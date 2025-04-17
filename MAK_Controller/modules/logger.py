@@ -15,4 +15,4 @@ def log(message: str):
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             f.write(f"[{timestamp}] {message}\n")
     except Exception as e:
-        print(f"Falha crítica no logging: {str(e)}")
+        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Falha crítica no logging: {str(e)}")

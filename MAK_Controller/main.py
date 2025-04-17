@@ -100,7 +100,7 @@ def move_order(order_id):
         with open(meta_file, 'w', encoding='utf-8') as f:
             f.write(meta_content)
 
-        print(f"Ordem iniciada:")
+        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Ordem iniciada:")
         move_to_input(file_to_move, overwrite=True)
         log(f"Ordem {order_id} movida manualmente")
         return jsonify({
@@ -140,7 +140,7 @@ def encerrar_ordem(order_id):
         
         # Mover arquivo
         shutil.move(str(target_file), str(backup_dir / target_file.name))
-        print(f"Ordem {order_id} encerrada e movida para backup")
+        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Ordem {order_id} encerrada e movida para backup")
         log(f"Ordem {order_id} encerrada e movida para backup")
         return jsonify({
             "message": f"Ordem {order_id} encerrada com sucesso!",
@@ -173,7 +173,7 @@ def recuperar_ordem(order_id):
         file_to_move = latest_file[0]
 
         # 3. Mover diretamente para input (usando a lógica de substituição existente)
-        print(f"Ordem recuperada:")
+        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Ordem recuperada:")
         move_to_input(file_to_move, overwrite=True)
 
         # 4. Atualizar/criar novo meta com status de reinício
