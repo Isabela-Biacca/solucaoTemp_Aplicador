@@ -8,6 +8,7 @@ from config import FOLDERS
 from datetime import datetime
 from pathlib import Path
 from waitress import serve
+from apscheduler.schedulers.background import BackgroundScheduler
 import shutil
 import threading
 import os
@@ -210,6 +211,27 @@ def get_log():
     except Exception as e:
         return jsonify({"error": str(e)}), 404, {'charset': 'utf-8'}
 
+def clean_old_mak_files():
+    waiting_path = Path(FOLDERS["waiting"])
+    backup_path = Path(FOLDERS["backup"])
+    
+    # Garantir que a pasta de backup existe
+    backup_path.mkdir(parents=True, exist_ok=True)
+    
+    # Calcular o timestamp de 7 dias atrás (1 semana)
+    cutoff_time = time.time() - (7 * 86400)  # 7 dias em segundos
+    
+    # Processar arquivos MAK165
+    for file in waiting_path.glob("MAK165*.xml"):
+        try:
+            file_mtime = file.stat().st_mtime  # Data da última modificação
+            if file_mtime < cutoff_time:
+                # Mover para backup
+                shutil.move(str(file), str(backup_path / file.name))
+                log(f"Arquivo movido para backup: {file.name}")
+        except Exception as e:
+            log(f"Falha ao mover {file.name}: {str(e)}")
+
 # Monitor de Arquivos
 class MakHandler(FileSystemEventHandler):
     def on_created(self, event):
@@ -286,6 +308,20 @@ if __name__ == '__main__':
     print("\n🚀 Inicializando servidor...")
     print(f"🔗 Acesso disponível em: http://172.16.16.70:8085")
     print("📡 Aguardando conexões...\n")
+    
+    # Agendamento para toda primeira quinta do mês
+    print("🧼 Agendando limpeza mensal de arquivos MAK165...")
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(
+        clean_old_mak_files,
+        'cron',
+        day_of_week='thu',
+        hour=0,
+        minute=0
+    )
+    
+    scheduler.start()
+    print(f"✅ Limpeza agendada: toda primeira quinta-feira do mês às 00:00")
     
     # serve(
     #     app,
