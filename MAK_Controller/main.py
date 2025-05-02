@@ -3,7 +3,7 @@ from flask import Flask, render_template, jsonify, request
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from modules.xml_processor import get_production_order
-from modules.file_manager import move_to_input
+from modules.file_manager import move_to_input, deduplicate_waiting_files
 from config import FOLDERS
 from datetime import datetime
 from pathlib import Path
@@ -219,7 +219,7 @@ def clean_old_mak_files():
     backup_path.mkdir(parents=True, exist_ok=True)
     
     # Calcular o timestamp de 7 dias atrás (1 semana)
-    cutoff_time = time.time() - (7 * 86400)  # 7 dias em segundos
+    cutoff_time = time.time() - (14 * 86400)  # 7 dias em segundos
     
     # Processar arquivos MAK165
     for file in waiting_path.glob("MAK165*.xml"):
@@ -236,7 +236,19 @@ def clean_old_mak_files():
 class MakHandler(FileSystemEventHandler):
     def on_created(self, event):
         if not event.is_directory and event.src_path.endswith(".xml"):
-            threading.Thread(target=self.handle_file, args=(event.src_path,)).start()
+            file_path = Path(event.src_path)
+            threading.Thread(target=self.full_process, args=(file_path,)).start()
+
+    def full_process(self, file_path):
+        try:
+            # Processar o arquivo normalmente (verificar input)
+            self.handle_file(file_path)
+            
+            # Deduplicar a pasta waiting
+            deduplicate_waiting_files()
+            
+        except Exception as e:
+            log(f"Falha no processamento completo de {file_path.name}: {str(e)}")
 
     def handle_file(self, file_path):
         max_retries = 5
