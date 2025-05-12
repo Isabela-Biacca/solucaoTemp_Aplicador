@@ -202,7 +202,7 @@ def recuperar_ordem(order_id):
         with open(new_meta_file, 'w', encoding='utf-8') as f:
             f.write(new_meta_content)
 
-        log(f"Ordem {order_id} recuperada: {file_to_move.name}")
+        log(f"Ordem {order_id} recuperada com sucesso.")
         return jsonify({
             "message": f"Ordem {order_id} recuperada com sucesso!",
             "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
