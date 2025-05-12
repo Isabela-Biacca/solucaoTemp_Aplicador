@@ -28,14 +28,14 @@ def move_to_input(source_file: Path, overwrite: bool = False) -> None:
                     files_to_remove.append(existing_file)
                     
             except Exception as e:
-                log(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Erro ao processar {existing_file.name}: {str(e)}")
-                print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Erro ao processar {existing_file.name}: {str(e)}")
+                log(f"Erro ao processar {existing_file.name}: {str(e)}")
+                print(f"Erro ao processar {existing_file.name}: {str(e)}")
                 continue
 
         # Validar se a nova versão é mais recente
         if latest_existing_date and new_creation_date <= latest_existing_date:
-            log(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Ordem {new_op} ignorada. Versão mais recente já existe ({latest_existing_date})")
-            print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Ordem {new_op} ignorada. Versão mais recente já existe ({latest_existing_date})")
+            log(f"Ordem {new_op} ignorada. Versão mais recente já existe ({latest_existing_date})")
+            print(f"Ordem {new_op} ignorada. Versão mais recente já existe ({latest_existing_date})")
             source_file.unlink()  # Remove o arquivo da waiting
             return
 
@@ -44,21 +44,21 @@ def move_to_input(source_file: Path, overwrite: bool = False) -> None:
             for file in files_to_remove:
                 try:
                     file.unlink()
-                    log(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Arquivo antigo removido: {file.name}")
-                    print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Arquivo antigo removido: {file.name}")
+                    log(f"Arquivo antigo removido: {file.name}")
+                    print(f"Arquivo antigo removido: {file.name}")
                 except Exception as e:
-                    log(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Falha ao remover {file.name}: {str(e)}")
-                    print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Falha ao remover {file.name}: {str(e)}")
+                    log(f"Falha ao remover {file.name}: {str(e)}")
+                    print(f"Falha ao remover {file.name}: {str(e)}")
 
         # Mover o novo arquivo
         target = target_dir / source_file.name
         shutil.move(str(source_file), str(target))
-        log(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Ordem {new_op} movida para input com sucesso!")
-        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Ordem {new_op} movida para input com sucesso!")
+        log(f"Ordem {new_op} movida para input com sucesso!")
+        print(f"Ordem {new_op} movida para input com sucesso!")
 
     except Exception as e:
-        log(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Falha crítica ao processar {source_file.name}: {str(e)}")
-        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Falha crítica ao processar {source_file.name}: {str(e)}")
+        log(f"Falha crítica ao processar {source_file.name}: {str(e)}")
+        print(f"Falha crítica ao processar {source_file.name}: {str(e)}")
         raise
     
 def deduplicate_waiting_files():

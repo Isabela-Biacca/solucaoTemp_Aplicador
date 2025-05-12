@@ -148,7 +148,6 @@ async function encerrarOrdem(orderId, button) {
   button.textContent = 'Processando...';
 
   try {
-    debugger
     const response = await fetch(`/encerrar/${orderId}`);
     const result = await response.json();
     showNotification(result.message, response.status);

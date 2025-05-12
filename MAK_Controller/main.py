@@ -154,6 +154,7 @@ def encerrar_ordem(order_id):
 def recuperar_ordem(order_id):
     try:
         backup_dir = Path(FOLDERS["input"]) / "backup"
+        waiting_dir = Path(FOLDERS["waiting"])
         files = []
         
         # 1. Buscar XMLs no backup
@@ -165,27 +166,45 @@ def recuperar_ordem(order_id):
             except Exception as e:
                 log(f"Erro ao processar {file}: {e}")
 
+        # 2. Buscar XMLs na waiting
+        for file in waiting_dir.glob("*.xml"):
+            try:
+                current_id, creation_date, _, _ = get_production_order(file)
+                if current_id == order_id:
+                    files.append((file, creation_date))
+            except Exception as e:
+                log(f"Erro ao processar {file}: {e}")
+
         if not files:
             return jsonify({"message": f"Ordem {order_id} não encontrada no backup"}), 404
 
-        # 2. Selecionar versão mais recente
+        # 3. Selecionar versão mais recente
         latest_file = max(files, key=lambda x: x[1])
-        file_to_move = latest_file[0]
+        file_to_move, creation_date = latest_file
+        
+        # 4. Remover todas as outras versões (incluindo da waiting e backups)
+        for file, _ in files:
+            if file != file_to_move:
+                try:
+                    file.unlink()
+                    log(f"Arquivo duplicado da ordem {order_id} removido: {file.name}")
+                except Exception as e:
+                    log(f"Falha ao excluir {file.name}: {str(e)}")
 
-        # 3. Mover diretamente para input (usando a lógica de substituição existente)
+        # 5. Mover para input (substitui se necessário)
         print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Ordem recuperada:")
         move_to_input(file_to_move, overwrite=True)
 
-        # 4. Atualizar/criar novo meta com status de reinício
+        # 6. Atualizar meta com timestamp atual (momento da recuperação)
         new_meta_content = f"{order_id}|REINICIADA/ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         new_meta_file = backup_dir / f"OP_{order_id}.meta"
         
-        with open(new_meta_file, 'w') as f:
+        with open(new_meta_file, 'w', encoding='utf-8') as f:
             f.write(new_meta_content)
 
-        log(f"Ordem {order_id} reiniciada do backup")
+        log(f"Ordem {order_id} recuperada: {file_to_move.name}")
         return jsonify({
-            "message": f"Ordem {order_id} reiniciada com sucesso!",
+            "message": f"Ordem {order_id} recuperada com sucesso!",
             "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }), 200
 
