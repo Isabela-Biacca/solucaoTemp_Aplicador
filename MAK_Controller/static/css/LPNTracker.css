@@ -1,0 +1,188 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* CORPO */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #c2cee8;
+  margin: 0;
+  height: max-content;
+  padding: 10px;
+}
+
+/* LATERAL */
+
+.side {
+  background-color: #10254b;
+  color: #f3f4f6;
+  padding: 30px;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(100vh - 20px);
+  border-radius: 5px;
+  position: fixed;
+  top: 10;
+  left: 10;
+}
+
+.h1-side {
+  font-size: 2rem;
+  color: #f3f4f6;
+}
+
+.button-side {
+  background-color: #00b6f1;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: medium;
+  padding: 10px;
+}
+
+.button-side:hover {
+  background-color: #00a0d1;
+  cursor: pointer;
+}
+
+.side>div>div {
+  width: max-content;
+  margin: 0 auto;
+}
+
+.side>div>div>button {
+  padding: 5px;
+  background-color: #00b6f1;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+/* HEADER */
+
+.container {
+  width: calc(100% - 300px);
+  margin-left: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* INPUT */
+.input-section {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.input-section input {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-section button {
+  padding: 10px 20px;
+  background-color: #10254b;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.loadedLpns,
+.searchedLpns {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2%;
+  width: 100%;
+}
+
+.loadedLpns {
+  display: flex;
+}
+
+.searchedLpns {
+  display: none;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.pagination button {
+  margin: 0 0.5rem;
+  padding: 0;
+  background-color: transparent;
+  color: #10254b;
+  font-size: medium;
+  border: none;
+}
+
+.paginationHover {
+  text-decoration: underline;
+}
+
+/* BOX KANBAN */
+
+.status-box {
+  height: min-content;
+  margin-top: 20px;
+  color: black;
+  padding: 2% calc(2% - 10px) 2% 2%;
+}
+
+.status-box button,
+input {
+  width: 20%;
+}
+
+.status {
+  width: 49%;
+  background-color: #f7f9fc;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+.status h2 {
+  text-align: center;
+  background-color: #10254b;
+  color: white;
+  margin-top: 0;
+  padding: 10px 0;
+  border-radius: 4px;
+}
+
+.status table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.status th,
+.status td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.status th {
+  background-color: #10254b;
+  color: white;
+}
+
+/* Ajuste das colunas */
+.status th:nth-child(4),
+.status td:nth-child(4) {
+  width: 100px;
+  text-align: center;
+}

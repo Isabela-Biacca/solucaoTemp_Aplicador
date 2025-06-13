@@ -8,7 +8,13 @@ FOLDERS = {
     "input": BASE_DIR / "input",         # Pasta input na raiz
     "logs": BASE_DIR / "MAK_Controller/logs",        # Logs dentro da pasta app
     "backup": BASE_DIR.parent / "makBackup"  # Pasta makBackup fora do projeto
+}
 
+APLICADORES_FOLDERS = {    
+    "Leitor Movel": BASE_DIR / "Leitor Movel" / "output",  # Pasta Leitor Movel/output na raiz
+    "San Martin": BASE_DIR / "San Martin" / "output",     # Pasta San Martin/output na raiz
+    "Liberty": BASE_DIR / "Liberty" / "output",         # Pasta Liberty/output na raiz
+    "Octopus": BASE_DIR / "Octopus" / "output"        # Pasta Octopus/output na raiz
 }
 
 # Cria apenas a pasta de logs (as demais já existem)

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking LPNs</title>
+
+    <link rel="stylesheet" href="../static/css/LPNTracker.css">
+    <script src="../static/js/LPNTracker.js" defer></script>
+</head>
+
+<body>
+    <div style="display: flex; flex-direction: row; height: 100%;">
+
+        <!-- barra lateral -->
+        <div class="side">
+            <img src="../static/img/logo-completa-branco-semfundo.png" alt="Logo" width="240">
+            <div>
+                <h1 class="h1-side">LPN Tracking</h1>
+                <div>
+                    <button onclick="window.location.href = '/'">
+                        ORDENS
+                    </button>
+                    <button onclick="window.location.href = '/logs'">
+                        LOG
+                    </button>
+                </div>
+            </div>
+            <button onclick="loadLpnExec()" class="button-side">Atualizar informações</button>
+        </div>
+
+        <div class="container">
+
+            <div class="input-section">
+                <label>Pesquise o número da LPN que deseja visualizar: </label><br>
+                <input type="number" name="search" id="search">
+                <button onclick="searchLpnExec()">Pesquisar</button>
+            </div>
+
+
+
+            <!-- view-aplicadores -->
+            <div class="status-box">
+
+                <div class="loadedLpns">
+                    <div class="status">
+                        <h2>Leitor Móvel</h2>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Número da LPN</th>
+                                    <th>Ordem em Produção</th>
+                                    <th>SKU</th>
+                                    <th>Criada em</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loadLM"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="status">
+                        <h2>San Martin</h2>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Número da LPN</th>
+                                    <th>Ordem em Produção</th>
+                                    <th>SKU</th>
+                                    <th>Criada em</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loadSM"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="status">
+                        <h2>Liberty</h2>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Número da LPN</th>
+                                    <th>Ordem em Produção</th>
+                                    <th>SKU</th>
+                                    <th>Criada em</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loadLib"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="status">
+                        <h2>Octopus</h2>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Número da LPN</th>
+                                    <th>Ordem em Produção</th>
+                                    <th>SKU</th>
+                                    <th>Criada em</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loadOct"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="searchedLpns">
+                    <div class="status">
+                        <h2>Leitor Móvel</h2>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Local</th>
+                                    <th>Número da LPN</th>
+                                    <th>Ordem em Produção</th>
+                                    <th>SKU</th>
+                                    <th>Criada em</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchLM"></tbody>
+                        </table>
+
+                        <!-- Navegação de páginas -->
+                        <div class="pagination" id="paginationLM"></div>
+                    </div>
+
+                    <div class="status">
+                        <h2>San Martin</h2>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Local</th>
+                                    <th>Número da LPN</th>
+                                    <th>Ordem em Produção</th>
+                                    <th>SKU</th>
+                                    <th>Criada em</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchSM"></tbody>
+                        </table>
+
+                        <!-- Navegação de páginas -->
+                        <div class="pagination" id="paginationSM"></div>
+                    </div>
+
+                    <div class="status">
+                        <h2>Liberty</h2>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Local</th>
+                                    <th>Número da LPN</th>
+                                    <th>Ordem em Produção</th>
+                                    <th>SKU</th>
+                                    <th>Criada em</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchLib"></tbody>
+                        </table>
+
+                        <!-- Navegação de páginas -->
+                        <div class="pagination" id="paginationLib"></div>
+                    </div>
+
+                    <div class="status">
+                        <h2>Octopus</h2>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Local</th>
+                                    <th>Número da LPN</th>
+                                    <th>Ordem em Produção</th>
+                                    <th>SKU</th>
+                                    <th>Criada em</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchOct"></tbody>
+                        </table>
+
+                        <!-- Navegação de páginas -->
+                        <div class="pagination" id="paginationOct"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

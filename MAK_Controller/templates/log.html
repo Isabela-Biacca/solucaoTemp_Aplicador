@@ -1,66 +1,63 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Monitor de Logs</title>
-    <link rel="stylesheet" href="../static/css/log.css" />
 
-    <!-- DataTables CSS -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitor de Logs</title>
+  <link rel="stylesheet" href="../static/css/log.css" />
 
-    <script src="../static/js/log.js" defer></script>
-  </head>
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css" />
 
-  <body>
-    <div class="container">
-      <header>
-        <img
-          src="../static/img/logo.png"
-          alt="Infra ID Logo"
-          class="logo"
-          width="150"
-          height="90"
-        />
-        <h1>SOLUÇÃO TEMPORÁRIA APLICADOR LPN</h1>
-        <button onclick="window.location.href='/'">ORDENS</button>
-      </header>
+  <script src="../static/js/log.js" defer></script>
+</head>
 
-      <div class="filters">
-        <input type="date" id="filterDate" />
-        <input type="text" id="filterOrder" placeholder="Filtrar por Ordem" />
-        <select id="filterStatus">
-          <option value="">Todos Status</option>
-          <option value="ERROR">ERROR</option>
-          <option value="OK">OK</option>
-          <option value="WARN">WARN</option>
-        </select>
+<body>
+  <div class="container">
+    <header>
+      <img src="../static/img/logo-completa-preto-semfundo.png" alt="Infra ID Logo" class="logo" width="150"
+        height="90" />
+      <h1>SOLUÇÃO TEMPORÁRIA APLICADOR LPN</h1>
+      <div>
+        <button onclick="window.location.href = '/rastreadorLPN'">
+          RASTREADOR LPN
+        </button>
+        <button onclick="window.location.href = '/'">
+          ORDENS
+        </button>
       </div>
+    </header>
 
-      <table id="logsTable" class="display">
-        <thead>
-          <tr>
-            <th>Data/Hora</th>
-            <th>Ordem</th>
-            <th>Mensagem</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <div class="filters">
+      <input type="date" id="filterDate" />
+      <input type="text" id="filterOrder" placeholder="Filtrar por Ordem" />
+      <select id="filterStatus">
+        <option value="">Todos Status</option>
+        <option value="ERROR">ERROR</option>
+        <option value="OK">OK</option>
+        <option value="WARN">WARN</option>
+      </select>
     </div>
 
-    <!-- jQuery + DataTables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script
-      type="text/javascript"
-      charset="utf8"
-      src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"
-    ></script>
-  </body>
+    <table id="logsTable" class="display">
+      <thead>
+        <tr>
+          <th>Data/Hora</th>
+          <th>Ordem</th>
+          <th>Mensagem</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- jQuery + DataTables -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" charset="utf8"
+    src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+</body>
+
 </html>

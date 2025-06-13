@@ -2,9 +2,9 @@ from modules.logger import log
 from flask import Flask, render_template, jsonify, request
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from modules.xml_processor import get_production_order
+from modules.xml_processor import get_production_order, get_lpn_values
 from modules.file_manager import move_to_input
-from config import FOLDERS
+from config import FOLDERS, APLICADORES_FOLDERS
 from datetime import datetime
 from pathlib import Path
 from waitress import serve
@@ -210,6 +210,78 @@ def get_log():
     
     except Exception as e:
         return jsonify({"error": str(e)}), 404, {'charset': 'utf-8'}
+    
+@app.route('/rastreadorLPN')
+def lpns():
+    return render_template('LPNTracker.html')
+
+@app.route('/api/lpn')
+def load_lpn():
+    allLpn = []
+
+    # Para arquivos em input
+    for aplicador, output_path in APLICADORES_FOLDERS.items():
+        folder_path = Path(output_path)
+        
+        for file in folder_path.glob("*.xml"):
+            try:
+                op, creation_date, sku, numLpn = get_lpn_values(file)
+                
+                data = datetime.fromisoformat(creation_date).strftime("%d/%m/%Y %H:%M:%S")
+                
+                allLpn.append({
+                    "aplicador": aplicador,
+                    "op": op,
+                    "numLpn": numLpn,
+                    "data": data,
+                    "sku": sku
+                })
+            except Exception as e: 
+                print(f"Erro ao processar {file}: {e}")
+    
+        allLpn = sorted(allLpn, key=lambda x: x['data'], reverse=True)
+                
+    return jsonify(allLpn)
+
+@app.route('/api/search')
+def search_lpn():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"error": "Informe um número de OP ou LPN"}), 400
+
+    resultado = []
+    
+    # Para arquivos em input
+    for aplicador, output_path in APLICADORES_FOLDERS.items():
+        pastas_dir = [output_path, output_path / "backup"]
+        
+        for pasta in pastas_dir:
+            if not pasta.exists():
+                continue  # ignora se a pasta não existir
+            
+            for file in pasta.glob("*.xml"):
+                try:
+                    op, creation_date, sku, numLpn = get_lpn_values(file)
+                    # moveTime = get_file_creation_time(file)
+                    
+                    data = datetime.fromisoformat(creation_date).strftime("%d/%m/%Y %H:%M:%S")
+
+                    
+                    if query in op or query in numLpn:
+                        resultado.append({
+                            "aplicador": aplicador,
+                            "op": op,
+                            "sku": sku,
+                            "data": data,
+                            "numLpn": numLpn,
+                            "origem": "backup" if "backup" in file.parts else "output",
+                            # "moveTime": moveTime
+                        })
+                except Exception as e: 
+                    print(f"Erro ao processar {file}: {e}")
+                        
+    return jsonify(resultado)
 
 def clean_old_mak_files():
     waiting_path = Path(FOLDERS["waiting"])
@@ -219,7 +291,7 @@ def clean_old_mak_files():
     backup_path.mkdir(parents=True, exist_ok=True)
     
     # Calcular o timestamp de 7 dias atrás (1 semana)
-    cutoff_time = time.time() - (7 * 86400)  # 7 dias em segundos
+    cutoff_time = time.time() - (14 * 86400)  # 7 dias em segundos
     
     # Processar arquivos MAK165
     for file in waiting_path.glob("MAK165*.xml"):
