@@ -275,7 +275,7 @@ def search_lpn():
                             "sku": sku,
                             "data": data,
                             "numLpn": numLpn,
-                            "origem": "backup" if "backup" in file.parts else "output",
+                            "origem": "Enviado" if "backup" in file.parts else "Aguardando",
                             # "moveTime": moveTime
                         })
                 except Exception as e: 
