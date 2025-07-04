@@ -1,4 +1,8 @@
 async function loadLpns() {
+    const loading = document.getElementById("loading");
+
+    loading.style.display = "block"; // mostra "carregando"
+
     const response = await fetch("/api/lpn");
     const data = await response.json();
 
@@ -18,6 +22,8 @@ async function loadLpns() {
             Oct.push(lpn);
         }
     });
+
+    loading.style.display = "none"; // esconde "carregando"
 
     document.getElementById("loadLM").innerHTML =
         LM.length > 0
@@ -113,6 +119,10 @@ let currentPageOct = 1;
 let LM = [], SM = [], Lib = [], Oct = [];
 
 async function searchLpn() {
+    const loading = document.getElementById("loading");
+
+    loading.style.display = "block"; // mostra "carregando"
+
     const query = document.getElementById("search").value;
     const response = await fetch(`/api/search?q=${query}`);
     const data = await response.json();
@@ -127,6 +137,8 @@ async function searchLpn() {
             case "Octopus": Oct.push(lpn); break;
         }
     });
+
+    loading.style.display = "none"; // esconde "carregando"
 
     renderTableSection(LM, currentPageLM, "searchLM");
     renderTableSection(SM, currentPageSM, "searchSM");

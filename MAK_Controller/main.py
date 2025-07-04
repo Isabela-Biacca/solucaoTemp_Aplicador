@@ -280,7 +280,9 @@ def search_lpn():
                         })
                 except Exception as e: 
                     print(f"Erro ao processar {file}: {e}")
-                        
+                               
+            print(f"Arquivos do Aplicador {aplicador} processados")
+            
     return jsonify(resultado)
 
 def clean_old_mak_files():
