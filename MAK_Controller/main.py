@@ -397,7 +397,7 @@ if __name__ == '__main__':
     
     # serve(
     #     app,
-    #     host='172.16.16.70',
+    #     host='172.16.0.0',
     #     port=8085,
     #     threads=6,
     #     ident="Sistema LPN"  # Nome personalizado nos logs

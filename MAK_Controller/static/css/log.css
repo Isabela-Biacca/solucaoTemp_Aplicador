@@ -6,7 +6,7 @@
 /* CORPO */
 body {
   font-family: Arial, sans-serif;
-  background-color: #ced7fd;
+  background-color: #c2cee8;
   margin: 0;
   height: max-content;
   padding: 10px;
@@ -98,7 +98,7 @@ header button {
 }
 
 #logsTable thead th {
-  background-color: #4054b2 !important;
+  background-color: #10254b !important;
   color: white !important;
   border: none !important;
   padding: 12px !important;
@@ -121,9 +121,9 @@ header button {
 }
 
 .dataTables_paginate .paginate_button.current {
-  background-color: #4054b2 !important;
+  background-color: #10254b !important;
   color: white !important;
-  border-color: #4054b2 !important;
+  border-color: #10254b !important;
 }
 
 .status {
