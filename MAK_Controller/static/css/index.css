@@ -81,7 +81,7 @@ header button {
 
 .input-section button {
   padding: 10px 20px;
-  background-color: #4054b2;
+  background-color: #10254b;
   border: none;
   border-radius: 4px;
   color: white;
@@ -106,7 +106,7 @@ header button {
 
 .status h2 {
   text-align: center;
-  background-color: #4054b2;
+  background-color: #10254b;
   color: white;
   margin-top: 0;
   padding: 10px 0;
@@ -127,7 +127,7 @@ header button {
 }
 
 .status th {
-  background-color: #4054b2;
+  background-color: #10254b;
   color: white;
 }
 
